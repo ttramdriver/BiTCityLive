@@ -68,7 +68,8 @@ def main():
     #     newIndexData = indexData[:startIndex + 39] + strdep + indexData[endIndex - 10:]
     #     with open('index.html', 'w') as f:
     #         f.write(newIndexData)
-    with open('test.txt', 'a') as f:
+    print(strdep + str(departures))
+    with open('test.txt', 'w') as f:
         f.write(strdep + str(departures))
 
 if __name__ == "__main__":

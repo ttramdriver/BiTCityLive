@@ -1,0 +1,121 @@
+10 Niepodległości pętla 1min ; 11 Niepodległości pętla 4min ; 11 Bielawy koniec 6min ; 10 Wilczak 22min ; 10 Niepodległości pętla 30min ; 11 Niepodległości pętla 22:07 ; 11 Bielawy koniec 22:10 ; 10 Wilczak 22:26 ; 10 Łoskoń tech. 22:32 ; 11 Łoskoń tech. 22:37 ; 10 Łoskoń tech. 23:02 ; 11 Łoskoń tech. 23:07 [<tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            1min
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            4min
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Bielawy koniec
+                        </td>
+<td>
+                            6min
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Wilczak
+                        </td>
+<td>
+                            22min
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            30min
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            22:07
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Bielawy koniec
+                        </td>
+<td>
+                            22:10
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Wilczak
+                        </td>
+<td>
+                            22:26
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Łoskoń tech.
+                        </td>
+<td>
+                            22:32
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Łoskoń tech.
+                        </td>
+<td>
+                            22:37
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Łoskoń tech.
+                        </td>
+<td>
+                            23:02
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Łoskoń tech.
+                        </td>
+<td>
+                            23:07
+                        </td>
+</tr>]
