@@ -3,13 +3,9 @@ from bs4 import BeautifulSoup
 import re
 import time
 
-def departures_get():
-    # Read the stop data from stop.txt
-    with open('stop.txt', 'r') as file:
-        stopData = file.read()
-
-    # Define the URL and headers (including the cookie)
-    url = f"http://odjazdy.zdmikp.bydgoszcz.pl/panels/0/full.aspx?stop={stopData}"
+def departures_get(stopNumber: int):
+    url = f"http://sip.um.torun.pl:8080/panels/0/default.aspx?stop=11401"
+    # url = f"http://odjazdy.zdmikp.bydgoszcz.pl/panels/0/full.aspx?stop={stopNumber}"
     headers = {
         "Cookie": ".ASPXANONYMOUS=JM4-7wyO3AEkAAAAZmI0NGM5NjctOWNiMS00MzUyLThkOWItZWJkYzdkZjc4OThl0; ASP.NET_SessionId=asfvqvmchkog0e5bnklu3vjy; 51D=639043519118894628",
     }
@@ -23,67 +19,77 @@ def departures_get():
 
     return response.text
 
-def str_cleanup(x: str):
-    x = x.replace('[', '').replace(']', '')
-    x = x.replace('<tr>', '').replace('</tr>', '')
-    x = x.replace('<td>', '').replace('</td>', '')
-    x = x.replace('\r', '').replace('\n', '').replace('\t', '')
-    x = x.replace('&gt;&gt;', 'Odjeżdża!')
-    x = x.replace(',', ';')
+def str_cleanup(departures: str):
+    departures = departures.replace('[', '').replace(']', '')
+    departures = departures.replace('P&amp;R', 'P&R')
     ch = 0
     check = 0
-    while ch < len(x):
-        if x[ch] == ' ': # or x[ch] != ';' or x[ch] != ',':
+    while departures.find('<') != -1 and departures.find('>') != -1:
+        departures = departures[:departures.find('<')] + departures[departures.find('>') + 1:]
+    departures = departures.replace('\r', '').replace('\n', '').replace('\t', '')
+    departures = departures.replace('&gt;&gt;', 'Odjeżdża!')
+    departures = departures.replace(',', ';')
+    ch = 0
+    check = 0
+    while ch < len(departures):
+        if departures[ch] == ' ':
             if check == 1:
                 check = 0
             else:
-                x = x[:ch] + '|' + x[ch + 1:]
+                departures = departures[:ch] + '|' + departures[ch + 1:]
             ch += 1  
         else:
             check = 1
             ch += 1
-    x = x.replace(' |', ',').replace('|', '').replace(',;,', ';')
+    departures += ';'
+    departures = departures.replace(' |', ',').replace('|', '').replace(',;,', ';').replace(',;', ';')
     ch = 0
     fixedHour = ""
     check = 0
     positions = []
-    while ch < len(x):
-        if x[ch] == ',':
+    while ch < len(departures):
+        if departures[ch] == ',':
             if check != 2:
                 ch += 1
                 check += 1
             if check == 2:
-                while ch < x.find(';', ch):
+                while ch < departures.find(';', ch):
                     positions.append(ch)
-                    fixedHour += str(x[ch])
+                    fixedHour += str(departures[ch])
                     ch += 1
                 print(positions, fixedHour)
                 if re.search("[0-9][0-9]:[0-9][0-9]", fixedHour):
                     tempTime = time.strftime('%H:%M')
                     currentHour = int(tempTime[0] + tempTime[1])
                     currentMinuteTime = int(tempTime[3] + tempTime[4]) + currentHour * 60
+                    print(fixedHour)
                     departHour = int(fixedHour[0] + fixedHour[1])
                     departMinuteTime = int(fixedHour[3] + fixedHour[4]) + departHour * 60
                     if currentMinuteTime < departMinuteTime:
                         minutesToDepart = departMinuteTime - currentMinuteTime
                     else:
                         minutesToDepart = 1440 - currentMinuteTime + departMinuteTime
-                    if minutesToDepart < 60:
-                        x = x[:positions[0]] + f'{minutesToDepart}min' + x[positions[-1] + 1:]
+                    with open('config.txt', 'r') as f:
+                        config = f.read()
+                        print(config)
+                        valuePosition = config.find('borderTime=') + 11
+                        borderTime = int(config[valuePosition:][:config.find(';', valuePosition) - 11])
+                    if minutesToDepart < borderTime:
+                        departures = departures[:positions[0]] + f'{minutesToDepart}min' + departures[positions[-1] + 1:]
                 positions = []
                 fixedHour = ""
                 check = 0     
             ch += 1  
-        elif x[ch] == ';':
+        elif departures[ch] == ';':
             check = 0
             ch += 1
         else:
             ch += 1
-    return x
+    return departures
 
 
-def main():
-    html = departures_get()
+def main(stopNumber:int):
+    html = departures_get(stopNumber)
     soup = BeautifulSoup(html, 'html.parser')
     departures = soup.select("tbody tr")
     strdep = str(departures)
@@ -103,4 +109,4 @@ def main():
         f.write(strdep + str(departures))
 
 if __name__ == "__main__":
-    main()
+    main(8127)
