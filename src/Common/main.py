@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import re
+import time
 
 def departures_get():
     # Read the stop data from stop.txt
@@ -7,11 +9,9 @@ def departures_get():
         stopData = file.read()
 
     # Define the URL and headers (including the cookie)
-    url = f"http://odjazdy.zdmikp.bydgoszcz.pl/panels/0/full.aspx{stopData}"
+    url = f"http://odjazdy.zdmikp.bydgoszcz.pl/panels/0/full.aspx?stop={stopData}"
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        "Cookie": ".ASPXANONYMOUS=6-4bu1073AEkAAAANGMxZGI2YzQtMTc1Ni00ODU0LWIxMDktMGE5MjMwMWI5NDkw0; ASP.NET_SessionId=culaallnki5gkxfm1nhgj54w; 51D=638952944769507745",  # Replace with the actual cookie
-        "Referer": "http://odjazdy.zdmikp.bydgoszcz.pl/panels/0/full.aspx?stop=8127"
+        "Cookie": ".ASPXANONYMOUS=JM4-7wyO3AEkAAAAZmI0NGM5NjctOWNiMS00MzUyLThkOWItZWJkYzdkZjc4OThl0; ASP.NET_SessionId=asfvqvmchkog0e5bnklu3vjy; 51D=639043519118894628",
     }
 
     # Send the HTTP request
@@ -24,17 +24,12 @@ def departures_get():
     return response.text
 
 def str_cleanup(x: str):
-    x = x.replace('[', '')
-    x = x.replace(']', '')
-    x = x.replace('<tr>', '')
-    x = x.replace('<td>', '')
-    x = x.replace('</tr>', '')
-    x = x.replace('</td>', '')
-    x = x.replace('\r', '').replace('\n', '')
-    x = x.replace('\t', '')
+    x = x.replace('[', '').replace(']', '')
+    x = x.replace('<tr>', '').replace('</tr>', '')
+    x = x.replace('<td>', '').replace('</td>', '')
+    x = x.replace('\r', '').replace('\n', '').replace('\t', '')
     x = x.replace('&gt;&gt;', 'Odjeżdża!')
     x = x.replace(',', ';')
-    x = x.replace('min', ',min')
     ch = 0
     check = 0
     while ch < len(x):
@@ -42,12 +37,48 @@ def str_cleanup(x: str):
             if check == 1:
                 check = 0
             else:
-                x = x[:ch] + ',' + x[ch + 1:]
+                x = x[:ch] + '|' + x[ch + 1:]
             ch += 1  
         else:
             check = 1
             ch += 1
-    x = x.replace(',', '')
+    x = x.replace(' |', ',').replace('|', '').replace(',;,', ';')
+    ch = 0
+    fixedHour = ""
+    check = 0
+    positions = []
+    while ch < len(x):
+        if x[ch] == ',':
+            if check != 2:
+                ch += 1
+                check += 1
+            if check == 2:
+                while ch < x.find(';', ch):
+                    positions.append(ch)
+                    fixedHour += str(x[ch])
+                    ch += 1
+                print(positions, fixedHour)
+                if re.search("[0-9][0-9]:[0-9][0-9]", fixedHour):
+                    tempTime = time.strftime('%H:%M')
+                    currentHour = int(tempTime[0] + tempTime[1])
+                    currentMinuteTime = int(tempTime[3] + tempTime[4]) + currentHour * 60
+                    departHour = int(fixedHour[0] + fixedHour[1])
+                    departMinuteTime = int(fixedHour[3] + fixedHour[4]) + departHour * 60
+                    if currentMinuteTime < departMinuteTime:
+                        minutesToDepart = departMinuteTime - currentMinuteTime
+                    else:
+                        minutesToDepart = 1440 - currentMinuteTime + departMinuteTime
+                    if minutesToDepart < 60:
+                        x = x[:positions[0]] + f'{minutesToDepart}min' + x[positions[-1] + 1:]
+                positions = []
+                fixedHour = ""
+                check = 0     
+            ch += 1  
+        elif x[ch] == ';':
+            check = 0
+            ch += 1
+        else:
+            ch += 1
     return x
 
 
@@ -57,7 +88,6 @@ def main():
     departures = soup.select("tbody tr")
     strdep = str(departures)
     strdep = str_cleanup(strdep)
-    print(strdep)
 
     # Write to index.html (your existing logic)
     # with open('index.html', 'r') as file:
@@ -68,7 +98,7 @@ def main():
     #     newIndexData = indexData[:startIndex + 39] + strdep + indexData[endIndex - 10:]
     #     with open('index.html', 'w') as f:
     #         f.write(newIndexData)
-    print(strdep + str(departures))
+    print(strdep)
     with open('test.txt', 'w') as f:
         f.write(strdep + str(departures))
 

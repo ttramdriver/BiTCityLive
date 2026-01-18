@@ -1,4 +1,4 @@
-10 Niepodległości pętla 1min ; 11 Niepodległości pętla 4min ; 11 Bielawy koniec 6min ; 10 Wilczak 22min ; 10 Niepodległości pętla 30min ; 11 Niepodległości pętla 22:07 ; 11 Bielawy koniec 22:10 ; 10 Wilczak 22:26 ; 10 Łoskoń tech. 22:32 ; 11 Łoskoń tech. 22:37 ; 10 Łoskoń tech. 23:02 ; 11 Łoskoń tech. 23:07 [<tr>
+10,Niepodległości pętla,3min;11,Niepodległości pętla,12min;11,Bielawy koniec,12min;10,Wilczak,28min;10,Niepodległości pętla,36min;11,Niepodległości pętla,41min;11,Bielawy koniec,43min;10,Wilczak,59min;10,Niepodległości pętla,19:32;11,Niepodległości pętla,19:37;11,Bielawy koniec,19:39;10,Wilczak,19:56;10,Niepodległości pętla,20:02;11,Niepodległości pętla,20:07;11,Bielawy koniec,20:10,[<tr>
 <td>
                             10
                         </td>
@@ -6,7 +6,7 @@
                             Niepodległości pętla
                         </td>
 <td>
-                            1min
+                            3min
                         </td>
 </tr>, <tr>
 <td>
@@ -16,7 +16,7 @@
                             Niepodległości pętla
                         </td>
 <td>
-                            4min
+                            12min
                         </td>
 </tr>, <tr>
 <td>
@@ -26,7 +26,7 @@
                             Bielawy koniec
                         </td>
 <td>
-                            6min
+                            12min
                         </td>
 </tr>, <tr>
 <td>
@@ -36,7 +36,7 @@
                             Wilczak
                         </td>
 <td>
-                            22min
+                            28min
                         </td>
 </tr>, <tr>
 <td>
@@ -46,7 +46,7 @@
                             Niepodległości pętla
                         </td>
 <td>
-                            30min
+                            19:02
                         </td>
 </tr>, <tr>
 <td>
@@ -56,7 +56,7 @@
                             Niepodległości pętla
                         </td>
 <td>
-                            22:07
+                            19:07
                         </td>
 </tr>, <tr>
 <td>
@@ -66,7 +66,7 @@
                             Bielawy koniec
                         </td>
 <td>
-                            22:10
+                            19:09
                         </td>
 </tr>, <tr>
 <td>
@@ -76,46 +76,76 @@
                             Wilczak
                         </td>
 <td>
-                            22:26
+                            19:25
                         </td>
 </tr>, <tr>
 <td>
                             10
                         </td>
 <td>
-                            Łoskoń tech.
+                            Niepodległości pętla
                         </td>
 <td>
-                            22:32
+                            19:32
                         </td>
 </tr>, <tr>
 <td>
                             11
                         </td>
 <td>
-                            Łoskoń tech.
+                            Niepodległości pętla
                         </td>
 <td>
-                            22:37
+                            19:37
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Bielawy koniec
+                        </td>
+<td>
+                            19:39
                         </td>
 </tr>, <tr>
 <td>
                             10
                         </td>
 <td>
-                            Łoskoń tech.
+                            Wilczak
                         </td>
 <td>
-                            23:02
+                            19:56
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            20:02
                         </td>
 </tr>, <tr>
 <td>
                             11
                         </td>
 <td>
-                            Łoskoń tech.
+                            Niepodległości pętla
                         </td>
 <td>
-                            23:07
+                            20:07
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Bielawy koniec
+                        </td>
+<td>
+                            20:10
                         </td>
 </tr>]
