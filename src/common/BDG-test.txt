@@ -1,0 +1,151 @@
+return time: 08:00; 10,Niepodległości pętla,Odjeżdża!;11,Niepodległości pętla,Odjeżdża!;10,Wilczak,4min;11,Bielawy koniec,11min;10,Niepodległości pętla,13min;11,Niepodległości pętla,20min;10,Wilczak,25min;11,Bielawy koniec,31min;10,Niepodległości pętla,8:31;11,Niepodległości pętla,8:38;10,Wilczak,8:46;10,Niepodległości pętla,8:51;11,Bielawy koniec,8:51;11,Niepodległości pętla,8:58;10,Wilczak,9:06; [<tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            &gt;&gt;
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            &gt;&gt;
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Wilczak
+                        </td>
+<td>
+                            4min
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Bielawy koniec
+                        </td>
+<td>
+                            11min
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            13min
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            20min
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Wilczak
+                        </td>
+<td>
+                            25min
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Bielawy koniec
+                        </td>
+<td>
+                            31min
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            8:31
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            8:38
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Wilczak
+                        </td>
+<td>
+                            8:46
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            8:51
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Bielawy koniec
+                        </td>
+<td>
+                            8:51
+                        </td>
+</tr>, <tr>
+<td>
+                            11
+                        </td>
+<td>
+                            Niepodległości pętla
+                        </td>
+<td>
+                            8:58
+                        </td>
+</tr>, <tr>
+<td>
+                            10
+                        </td>
+<td>
+                            Wilczak
+                        </td>
+<td>
+                            9:06
+                        </td>
+</tr>]
