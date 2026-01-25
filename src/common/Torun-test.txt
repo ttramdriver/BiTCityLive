@@ -1,14 +1,14 @@
-return time: 08:00; 4,ELANA B,5min;1,OLIMPIJSKA P&R,10min;7,WSCHODNIA (pętla),23min;4,ELANA B,26min;1,OLIMPIJSKA P&R,42min;7,WSCHODNIA (pętla),8:54;4,ELANA B,8:57;1,OLIMPIJSKA P&R,9:13; [<tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl01_tdsLinea" style="text-align:center;background-color:#FFFF00;color:#000000;">
-                    4
+return time: 19:57; 1,OLIMPIJSKA P&R,3min;1,OLIMPIJSKA P&R,9min;4,ELANA B,27min;4,ELANA B,27min;1,OLIMPIJSKA P&R,48min;1,OLIMPIJSKA P&R,48min;4,ELANA B,21:09;1,OLIMPIJSKA P&R,21:30; [<tr>
+<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl01_tdsLinea" style="text-align:center;background-color:#92D050;color:#000000;">
+                    1
                 </td>
 <td>
-                    ELANA B
+                    OLIMPIJSKA P&amp;R
                 
-                        <span style="float:right;"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
+                        <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    5min
+                    20:00
                 </td>
 </tr>, <tr>
 <td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl02_tdsLinea" style="text-align:center;background-color:#92D050;color:#000000;">
@@ -20,22 +20,10 @@ return time: 08:00; 4,ELANA B,5min;1,OLIMPIJSKA P&R,10min;7,WSCHODNIA (pętla),2
                         <span style="float:right;"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    10min
+                    9min
                 </td>
 </tr>, <tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl03_tdsLinea" style="text-align:center;background-color:#F00000;color:#FFFFFF;">
-                    7
-                </td>
-<td>
-                    WSCHODNIA (pętla)
-                
-                        <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
-</td>
-<td style="text-align: center">
-                    23min
-                </td>
-</tr>, <tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl04_tdsLinea" style="text-align:center;background-color:#FFFF00;color:#000000;">
+<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl03_tdsLinea" style="text-align:center;background-color:#FFFF00;color:#000000;">
                     4
                 </td>
 <td>
@@ -44,7 +32,19 @@ return time: 08:00; 4,ELANA B,5min;1,OLIMPIJSKA P&R,10min;7,WSCHODNIA (pętla),2
                         <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    26min
+                    20:24
+                </td>
+</tr>, <tr>
+<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl04_tdsLinea" style="text-align:center;background-color:#FFFF00;color:#000000;">
+                    4
+                </td>
+<td>
+                    ELANA B
+                
+                        <span style="float:right;"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
+</td>
+<td style="text-align: center">
+                    27min
                 </td>
 </tr>, <tr>
 <td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl05_tdsLinea" style="text-align:center;background-color:#92D050;color:#000000;">
@@ -56,19 +56,19 @@ return time: 08:00; 4,ELANA B,5min;1,OLIMPIJSKA P&R,10min;7,WSCHODNIA (pętla),2
                         <span style="float:right;"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    42min
+                    48min
                 </td>
 </tr>, <tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl06_tdsLinea" style="text-align:center;background-color:#F00000;color:#FFFFFF;">
-                    7
+<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl06_tdsLinea" style="text-align:center;background-color:#92D050;color:#000000;">
+                    1
                 </td>
 <td>
-                    WSCHODNIA (pętla)
+                    OLIMPIJSKA P&amp;R
                 
                         <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    8:54
+                    20:45
                 </td>
 </tr>, <tr>
 <td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl07_tdsLinea" style="text-align:center;background-color:#FFFF00;color:#000000;">
@@ -80,7 +80,7 @@ return time: 08:00; 4,ELANA B,5min;1,OLIMPIJSKA P&R,10min;7,WSCHODNIA (pętla),2
                         <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    8:57
+                    21:09
                 </td>
 </tr>, <tr>
 <td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl08_tdsLinea" style="text-align:center;background-color:#92D050;color:#000000;">
@@ -92,6 +92,6 @@ return time: 08:00; 4,ELANA B,5min;1,OLIMPIJSKA P&R,10min;7,WSCHODNIA (pętla),2
                         <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    9:13
+                    21:30
                 </td>
 </tr>]

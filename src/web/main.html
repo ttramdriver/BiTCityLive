@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://pyscript.net/releases/2024.2.1/core.css">
+        <script type="module" src="https://pyscript.net/releases/2024.2.1/core.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <title>Document</title>
+    </head>
+    <body>
+        tests
+    </body>
+    <py-config>
+        packages = ["arrr", "numberwang", "beautifulsoup4", "asyncio"]
+    </py-config>
+    <py-script>
+        import asyncio
+        from bs4 import BeautifulSoup
+        from pyscript import display
+        from pyodide.http import pyfetch
+        import re
+        from datetime import datetime, timedelta
+
+
+        async def departuresGet(stopNumber: str):
+            # Checks if the specified stop is in Bydgoszcz or Toruń and sets the about to be scraped url to the stop url
+            if stopNumber[0] == "B":    url = f"https://cors-anywhere.com/http://odjazdy.zdmikp.bydgoszcz.pl/mobile/panel.aspx?previous=/mobile/search.aspx&stop={stopNumber[1:]}"   
+            elif stopNumber[0] == "T":  url = f"https://api.codetabs.com/v1/proxy?quest=http://sip.um.torun.pl:8080/panels/0/default.aspx?stop={stopNumber[1:]}"
+
+            # Sends the HTTP request and check if could connec
+
+                # Sends the HTTP request and check if could connect
+            #try:
+            response = await pyfetch(url)
+            #except:
+            #    response = f"Failed to connect to the URL."
+            #    print(response)
+            result = await response.text()
+            return result
+            # Checks if the request was successful
+            #if response != str(response):
+            #    if response.status_code != 200:
+            #        response = f"Failed to fetch data. Status code: {response.status_code}"
+            #        print(response)
+            
+            #if response != str(response):
+            #    return response.text
+
+            #return response
+
+        def strCleanup(departures: str):
+            # This whole thing just cleans up the scraped website so that the information from it is easiely accessible by code
+            departures = departures.replace('[', '').replace(']', '')
+            departures = departures.replace('amp;', '')
+            ch = 0
+            check = 0
+            while departures.find('<') != -1 and departures.find('>') != -1:
+                departures = departures[:departures.find('<')] + departures[departures.find('>') + 1:]
+            departures = departures.replace('\r', '').replace('\n', '').replace('\t', '')
+            departures = departures.replace('&gt;&gt;', 'Odjeżdża!')
+            departures = departures.replace(',', ';')
+            ch = 0
+            check = 0
+            while ch < len(departures):
+                if departures[ch] == ' ':
+                    if check == 1:
+                        check = 0
+                    else:
+                        departures = departures[:ch] + '|' + departures[ch + 1:]
+                    ch += 1  
+                else:
+                    check = 1
+                    ch += 1
+            departures += ';'
+            departures = departures.replace(' |', ',').replace('|', '').replace(',;,', ';').replace(',;', ';')
+            return departures
+
+
+        # def strModify(departures: str):
+        #     # This whole thing modifies the scraped website based on user config
+        #     with open('config.txt', 'r') as f:
+        #         config = f.read()
+        #         print(config)
+        #         valuePosition = config.find('borderTime=') + 11
+        #         borderTime = int(config[valuePosition:][:config.find(';', valuePosition) - 11])
+        #     ch = 0
+        #     fixedHour = ""
+        #     check = 0
+        #     positions = []
+        #     while ch < len(departures):
+        #         if departures[ch] == ',':
+        #             if check != 2:
+        #                 ch += 1
+        #                 check += 1
+        #             if check == 2:
+        #                 while ch < departures.find(';', ch):
+        #                     positions.append(ch)
+        #                     fixedHour += str(departures[ch])
+        #                     ch += 1
+        #                 print(positions, fixedHour)
+        #                 if re.search("[0-9][0-9]:[0-9][0-9]", fixedHour):
+        #                     tempTime = datetime.now().strftime('%H:%M')
+        #                     currentHour = int(tempTime[0] + tempTime[1])
+        #                     currentMinuteTime = int(tempTime[3] + tempTime[4]) + currentHour * 60
+        #                     print(fixedHour)
+        #                     departHour = int(fixedHour[0] + fixedHour[1])
+        #                     departMinuteTime = int(fixedHour[3] + fixedHour[4]) + departHour * 60
+        #                     if currentMinuteTime < departMinuteTime:
+        #                         minutesToDepart = departMinuteTime - currentMinuteTime
+        #                     else:
+        #                         minutesToDepart = 1440 - currentMinuteTime + departMinuteTime
+        #                     if minutesToDepart < borderTime:
+        #                         departures = departures[:positions[0]] + f'{minutesToDepart}min' + departures[positions[-1] + 1:]
+        #                 elif re.search("[0-9]?[0-9]?[0-9]min", fixedHour):
+        #                     minutesToDepart = int(fixedHour[:fixedHour.find('min')])
+        #                     if minutesToDepart >= borderTime:
+        #                         departures = departures[:positions[0]] + (datetime.now() + timedelta(minutes=minutesToDepart)).strftime('%H:%M') + departures[positions[-1] + 1:]
+        #                 positions = []
+        #                 fixedHour = ""
+        #                 check = 0     
+        #             ch += 1  
+        #         elif departures[ch] == ';':
+        #             check = 0
+        #             ch += 1
+        #         else:
+        #             ch += 1
+        #     return departures
+
+        async def main(stopNumber:str):
+            html = await asyncio.ensure_future(departuresGet(stopNumber))
+            soup = BeautifulSoup(str(html), 'html.parser')
+            rawDepartures = soup.select("tbody tr")
+            print(rawDepartures)
+            departures = strCleanup(str(rawDepartures))
+            display(departures)
+            # modifiedDepartures = strModify(departures)
+            
+        #    print(f'{datetime.now().strftime("%H:%M")}; {departures}')
+            # if stopNumber[0] == "T":
+            #     with open('Torun-test.txt', 'w') as f:
+            #         f.write(f'return time: {datetime.now().strftime("%H:%M")}; {modifiedDepartures} {str(rawDepartures)}')
+            # elif stopNumber[0] == "B":
+            #     with open('BDG-test.txt', 'w') as f:
+            #         f.write(f'return time: {datetime.now().strftime("%H:%M")}; {modifiedDepartures} {str(rawDepartures)}')
+
+
+        if __name__ == "__main__":
+            asyncio.ensure_future(main("B13338"))
+            asyncio.ensure_future(main("T59001"))
+        </py-script>
+</html>

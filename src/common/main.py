@@ -6,16 +6,12 @@ from datetime import datetime, timedelta
 
 def departuresGet(stopNumber: str):
     # Checks if the specified stop is in Bydgoszcz or Toruń and sets the about to be scraped url to the stop url
-    if stopNumber[0] == "B": url = f"http://odjazdy.zdmikp.bydgoszcz.pl/panels/0/full.aspx?stop={stopNumber[1:]}"
+    if stopNumber[0] == "B": url = f"http://odjazdy.zdmikp.bydgoszcz.pl/mobile/panel.aspx?previous=/mobile/search.aspx&stop={stopNumber[1:]}"
     elif stopNumber[0] == "T": url = f"http://sip.um.torun.pl:8080/panels/0/default.aspx?stop={stopNumber[1:]}"
-
-    headers = {
-        "Cookie": ".ASPXANONYMOUS=JM4-7wyO3AEkAAAAZmI0NGM5NjctOWNiMS00MzUyLThkOWItZWJkYzdkZjc4OThl0; ASP.NET_SessionId=asfvqvmchkog0e5bnklu3vjy; 51D=639043519118894628",
-    }
 
     # Sends the HTTP request and check if could connect
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url)
     except:
         response = f"Failed to connect to the URL."
         print(response)
@@ -127,6 +123,6 @@ def main(stopNumber:str):
 
 
 if __name__ == "__main__":
-    main("T59001")
     main("B8111")
+    main("T59001")
     # T is for Toruń, B for Bydgoszcz, the number is the stops id
