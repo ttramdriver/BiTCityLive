@@ -1,49 +1,119 @@
-return time: 19:57; 10,Wilczak,Odjeżdża!;5,Rycerska,9min;3,Wilczak,9min;11,Bielawy koniec,14min;10,Wilczak,30min;3,Wilczak,39min;11,Bielawy koniec,45min;5,Rycerska,51min;10,Wilczak,20:58;3,Wilczak,21:06;11,Bielawy koniec,21:12;5,Rycerska,21:18;10,Wilczak,21:28;3,Wilczak,21:36;11,Bielawy koniec,21:42; [<tr>
+return time: 22:56; 6,Zajezdnia Tramwajowa,4min;9,Zajezdnia Tramwajowa,7min;10,Zajezdnia Tramwajowa,8min;5,Zajezdnia Tramwajowa,10min;4,Zajezdnia Tramwajowa,17min;8,Zajezdnia Tramwajowa,20min;2,Zajezdnia Tramwajowa,20min;11,Zajezdnia Tramwajowa,22min;3,Łoskoń tech.,27min;6,Zajezdnia Tramwajowa,28min;9,Zajezdnia Tramwajowa,29min;10,Zajezdnia Tramwajowa,30min;3,Zajezdnia Tramwajowa,34min;5,Zajezdnia Tramwajowa,37min; [<tr>
+<td>
+                6
+            </td>
+<td>
+                Zajezdnia Tramwajowa
+            </td>
+<td>
+                23:00
+            </td>
+</tr>, <tr>
+<td>
+                9
+            </td>
+<td>
+                Zajezdnia Tramwajowa
+            </td>
+<td>
+                7min
+            </td>
+</tr>, <tr>
 <td>
                 10
             </td>
 <td>
-                Wilczak
+                Zajezdnia Tramwajowa
             </td>
 <td>
-                &gt;&gt;
+                8min
             </td>
 </tr>, <tr>
 <td>
                 5
             </td>
 <td>
-                Rycerska
+                Zajezdnia Tramwajowa
             </td>
 <td>
-                9min
+                10min
             </td>
 </tr>, <tr>
 <td>
-                3
+                4
             </td>
 <td>
-                Wilczak
+                Zajezdnia Tramwajowa
             </td>
 <td>
-                9min
+                17min
+            </td>
+</tr>, <tr>
+<td>
+                8
+            </td>
+<td>
+                Zajezdnia Tramwajowa
+            </td>
+<td>
+                20min
+            </td>
+</tr>, <tr>
+<td>
+                2
+            </td>
+<td>
+                Zajezdnia Tramwajowa
+            </td>
+<td>
+                20min
             </td>
 </tr>, <tr>
 <td>
                 11
             </td>
 <td>
-                Bielawy koniec
+                Zajezdnia Tramwajowa
             </td>
 <td>
-                14min
+                22min
+            </td>
+</tr>, <tr>
+<td>
+                3
+            </td>
+<td>
+                Łoskoń tech.
+            </td>
+<td>
+                27min
+            </td>
+</tr>, <tr>
+<td>
+                6
+            </td>
+<td>
+                Zajezdnia Tramwajowa
+            </td>
+<td>
+                28min
+            </td>
+</tr>, <tr>
+<td>
+                9
+            </td>
+<td>
+                Zajezdnia Tramwajowa
+            </td>
+<td>
+                29min
             </td>
 </tr>, <tr>
 <td>
                 10
             </td>
 <td>
-                Wilczak
+                Zajezdnia Tramwajowa
             </td>
 <td>
                 30min
@@ -53,99 +123,19 @@ return time: 19:57; 10,Wilczak,Odjeżdża!;5,Rycerska,9min;3,Wilczak,9min;11,Bie
                 3
             </td>
 <td>
-                Wilczak
+                Zajezdnia Tramwajowa
             </td>
 <td>
-                20:36
-            </td>
-</tr>, <tr>
-<td>
-                11
-            </td>
-<td>
-                Bielawy koniec
-            </td>
-<td>
-                20:42
+                23:30
             </td>
 </tr>, <tr>
 <td>
                 5
             </td>
 <td>
-                Rycerska
+                Zajezdnia Tramwajowa
             </td>
 <td>
-                20:48
-            </td>
-</tr>, <tr>
-<td>
-                10
-            </td>
-<td>
-                Wilczak
-            </td>
-<td>
-                20:58
-            </td>
-</tr>, <tr>
-<td>
-                3
-            </td>
-<td>
-                Wilczak
-            </td>
-<td>
-                21:06
-            </td>
-</tr>, <tr>
-<td>
-                11
-            </td>
-<td>
-                Bielawy koniec
-            </td>
-<td>
-                21:12
-            </td>
-</tr>, <tr>
-<td>
-                5
-            </td>
-<td>
-                Rycerska
-            </td>
-<td>
-                21:18
-            </td>
-</tr>, <tr>
-<td>
-                10
-            </td>
-<td>
-                Wilczak
-            </td>
-<td>
-                21:28
-            </td>
-</tr>, <tr>
-<td>
-                3
-            </td>
-<td>
-                Wilczak
-            </td>
-<td>
-                21:36
-            </td>
-</tr>, <tr>
-<td>
-                11
-            </td>
-<td>
-                Bielawy koniec
-            </td>
-<td>
-                21:42
+                23:33
             </td>
 </tr>]

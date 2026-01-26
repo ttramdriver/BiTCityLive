@@ -9,23 +9,16 @@ def departuresGet(stopNumber: str):
     if stopNumber[0] == "B": url = f"http://odjazdy.zdmikp.bydgoszcz.pl/mobile/panel.aspx?previous=/mobile/search.aspx&stop={stopNumber[1:]}"
     elif stopNumber[0] == "T": url = f"http://sip.um.torun.pl:8080/panels/0/default.aspx?stop={stopNumber[1:]}"
 
-    # Sends the HTTP request and check if could connect
+    # Sends the HTTP request and check if successful
     try:
         response = requests.get(url)
-    except:
-        response = f"Failed to connect to the URL."
-        print(response)
-    
-    # Checks if the request was successful
-    if response != str(response):
         if response.status_code != 200:
-            response = f"Failed to fetch data. Status code: {response.status_code}"
-            print(response)
-    
-    if response != str(response):
+            print(f"Failed to fetch data. Status code: {response.status_code}")
+            return None
         return response.text
-
-    return response
+    except Exception as e:
+        print(f"Failed to fetch data. Exception: {e}")
+        return None
 
 def strCleanup(departures: str):
     # This whole thing just cleans up the scraped website so that the information from it is easiely accessible by code
@@ -123,6 +116,6 @@ def main(stopNumber:str):
 
 
 if __name__ == "__main__":
-    main("B8111")
-    main("T59001")
+    main("B3026")
+    main("T28202")
     # T is for Toruń, B for Bydgoszcz, the number is the stops id

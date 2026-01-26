@@ -3,13 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="commonStyleB.css" id="id_childStylesheet">
         <link rel="stylesheet" href="https://pyscript.net/releases/2024.2.1/core.css">
         <script type="module" src="https://pyscript.net/releases/2024.2.1/core.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <title>Document</title>
     </head>
     <body>
-        tests
+        test
     </body>
     <py-config>
         packages = ["arrr", "numberwang", "beautifulsoup4", "asyncio"]
@@ -25,29 +26,22 @@
 
         async def departuresGet(stopNumber: str):
             # Checks if the specified stop is in Bydgoszcz or Toruń and sets the about to be scraped url to the stop url
-            if stopNumber[0] == "B":    url = f"https://cors-anywhere.com/http://odjazdy.zdmikp.bydgoszcz.pl/mobile/panel.aspx?previous=/mobile/search.aspx&stop={stopNumber[1:]}"   
-            elif stopNumber[0] == "T":  url = f"https://api.codetabs.com/v1/proxy?quest=http://sip.um.torun.pl:8080/panels/0/default.aspx?stop={stopNumber[1:]}"
+            if stopNumber[0] == "B":    url = f"https://cors-anywhere.com/http://odjazdy.zdmikp.bydgoszcz.pl/mobile/panel.aspx?&stop={stopNumber[1:]}"   
+            elif stopNumber[0] == "T":  url = f"https://api.codetabs.com/v1/proxy/?quest=http://sip.um.torun.pl:8080/panels/0/default.aspx?stop={stopNumber[1:]}"
 
-            # Sends the HTTP request and check if could connec
-
-                # Sends the HTTP request and check if could connect
-            #try:
-            response = await pyfetch(url)
-            #except:
-            #    response = f"Failed to connect to the URL."
-            #    print(response)
-            result = await response.text()
-            return result
-            # Checks if the request was successful
-            #if response != str(response):
-            #    if response.status_code != 200:
-            #        response = f"Failed to fetch data. Status code: {response.status_code}"
-            #        print(response)
-            
-            #if response != str(response):
-            #    return response.text
-
-            #return response
+            # Sends the HTTP request and check if could connect
+            try:
+                response = await pyfetch(url)
+                result = await response.text()
+                print(result)
+                if response.status != 200:
+                    response = f"Failed to fetch data. Status code: {response.status}"
+                    return None
+                return result    
+            except Exception as e:
+                response = f"Failed to connect to the URL. Exception: {e}"
+                print(response)
+                return None
 
         def strCleanup(departures: str):
             # This whole thing just cleans up the scraped website so that the information from it is easiely accessible by code
@@ -146,7 +140,7 @@
 
 
         if __name__ == "__main__":
-            asyncio.ensure_future(main("B13338"))
-            asyncio.ensure_future(main("T59001"))
+            asyncio.ensure_future(main("B8111"))
+            asyncio.ensure_future(main("T28202"))
         </py-script>
 </html>

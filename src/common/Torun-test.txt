@@ -1,97 +1,49 @@
-return time: 19:57; 1,OLIMPIJSKA P&R,3min;1,OLIMPIJSKA P&R,9min;4,ELANA B,27min;4,ELANA B,27min;1,OLIMPIJSKA P&R,48min;1,OLIMPIJSKA P&R,48min;4,ELANA B,21:09;1,OLIMPIJSKA P&R,21:30; [<tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl01_tdsLinea" style="text-align:center;background-color:#92D050;color:#000000;">
-                    1
+return time: 22:56; 32,DO ZAJEZDNI,2min;12,DO ZAJEZDNI,7min;27,Żwirki i Wigury,8min;20,Koniuchy,50min; [<tr>
+<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl01_tdsLinea" style="text-align:center;background-color:#FF00FF;color:#FFFFFF;">
+                    32
                 </td>
 <td>
-                    OLIMPIJSKA P&amp;R
-                
-                        <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
-</td>
-<td style="text-align: center">
-                    20:00
-                </td>
-</tr>, <tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl02_tdsLinea" style="text-align:center;background-color:#92D050;color:#000000;">
-                    1
-                </td>
-<td>
-                    OLIMPIJSKA P&amp;R
+                    DO ZAJEZDNI
                 
                         <span style="float:right;"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    9min
+                    2min
                 </td>
 </tr>, <tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl03_tdsLinea" style="text-align:center;background-color:#FFFF00;color:#000000;">
-                    4
+<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl02_tdsLinea" style="text-align:center;background-color:#D2691E;color:#000000;">
+                    12
                 </td>
 <td>
-                    ELANA B
-                
-                        <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
-</td>
-<td style="text-align: center">
-                    20:24
-                </td>
-</tr>, <tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl04_tdsLinea" style="text-align:center;background-color:#FFFF00;color:#000000;">
-                    4
-                </td>
-<td>
-                    ELANA B
+                    DO ZAJEZDNI
                 
                         <span style="float:right;"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    27min
+                    7min
                 </td>
 </tr>, <tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl05_tdsLinea" style="text-align:center;background-color:#92D050;color:#000000;">
-                    1
+<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl03_tdsLinea" style="text-align:center;background-color:#E4F45D;color:#000000;">
+                    27
                 </td>
 <td>
-                    OLIMPIJSKA P&amp;R
+                    Żwirki i Wigury
                 
                         <span style="float:right;"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    48min
+                    8min
                 </td>
 </tr>, <tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl06_tdsLinea" style="text-align:center;background-color:#92D050;color:#000000;">
-                    1
+<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl04_tdsLinea" style="text-align:center;background-color:#C7CE03;color:#000000;">
+                    20
                 </td>
 <td>
-                    OLIMPIJSKA P&amp;R
+                    Koniuchy
                 
-                        <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
+                        <span style="float:right;"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
 </td>
 <td style="text-align: center">
-                    20:45
-                </td>
-</tr>, <tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl07_tdsLinea" style="text-align:center;background-color:#FFFF00;color:#000000;">
-                    4
-                </td>
-<td>
-                    ELANA B
-                
-                        <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
-</td>
-<td style="text-align: center">
-                    21:09
-                </td>
-</tr>, <tr>
-<td id="ctl00_ctl00_ContentPlaceHolderContenido_ContentPlaceHolderContenido_RepeaterLCDEntries_ctl08_tdsLinea" style="text-align:center;background-color:#92D050;color:#000000;">
-                    1
-                </td>
-<td>
-                    OLIMPIJSKA P&amp;R
-                
-                        <span style="float:right;display:none"><img alt="Wheelchair" border="0" height="16" src="../../images/wheelchair-24.png" style="display:block;"/></span>
-</td>
-<td style="text-align: center">
-                    21:30
+                    50min
                 </td>
 </tr>]
