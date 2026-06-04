@@ -3,61 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BiTCityLive</title>
+    <title>BiTCityLive - Odjazdy</title>
+    
     <style>
+        :root {
+            --bg-color: #f9f9f9;
+            --surface-color: #ffffff;
+            --primary-color: #2e7d32;
+            --text-main: #1a1a1a;
+            --text-secondary: #555555;
+            --border-color: #dddddd;
+            --hover-bg: #f1f1f1;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --surface-color: #1e1e1e;
+                --primary-color: #4CAF50;
+                --text-main: #ffffff;
+                --text-secondary: #a0a0a0;
+                --border-color: #333333;
+                --hover-bg: #2a2d2e;
+            }
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1e1e1e;
-            color: #cccccc;
-            max-width: 800px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            max-width: 700px;
             margin: 0 auto;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .header-title {
-            color: #4CAF50;
+
+        .header-container {
             text-align: center;
-            font-size: 3em;
-            margin-bottom: 5px;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-        .header-subtitle {
-            text-align: center;
-            color: #888;
             margin-bottom: 30px;
-            font-size: 1.1em;
+            margin-top: 20px;
         }
+
+        .header-title {
+            color: var(--primary-color);
+            font-size: 3em;
+            margin: 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            margin-top: 5px;
+        }
+
         .search-container {
-            background-color: #252526;
+            background-color: var(--surface-color);
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            text-align: center;
-            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 20px;
         }
+
         .input-wrapper {
             display: flex;
-            justify-content: center;
             gap: 10px;
+            justify-content: center;
         }
+
         input[type="text"] {
-            padding: 12px;
-            width: 100%;
-            max-width: 400px;
-            border: 1px solid #3c3c3c;
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
-            background-color: #3c3c3c;
-            color: white;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             font-size: 16px;
         }
+
         input[type="text"]:focus {
-            border-color: #4CAF50;
+            border-color: var(--primary-color);
             outline: none;
         }
+
         input[type="submit"] {
             padding: 12px 25px;
-            background-color: #4CAF50;
-            color: #1e1e1e;
+            background-color: var(--primary-color);
+            color: #ffffff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -65,51 +102,108 @@
             font-weight: bold;
             transition: background-color 0.2s;
         }
+
         input[type="submit"]:hover {
-            background-color: #45a049;
+            opacity: 0.9;
         }
+
+        .instructions {
+            background-color: transparent;
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            width: 100%;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 15px;
+            box-sizing: border-box;
+        }
+
+        .instructions h3 {
+            margin-top: 0;
+            font-size: 1.1em;
+            color: var(--text-main);
+        }
+
+        .instructions ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #252526;
+            background-color: var(--surface-color);
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
         }
+
         th, td {
             padding: 15px;
             text-align: left;
-            border-bottom: 1px solid #3c3c3c;
+            border-bottom: 1px solid var(--border-color);
         }
+
         th {
-            background-color: #2d2d30;
-            color: #4CAF50;
+            background-color: var(--bg-color);
+            color: var(--text-secondary);
             font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
         }
-        tr:hover {
-            background-color: #2a2d2e;
+
+        tr:last-child td {
+            border-bottom: none;
         }
+
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
+
         .line-number {
-            background-color: #4CAF50;
-            color: #1e1e1e;
-            padding: 5px 10px;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 4px 8px;
             border-radius: 4px;
             font-weight: bold;
         }
+
+        .time-display {
+            font-weight: bold;
+        }
+
         .empty-state {
             text-align: center;
-            color: #888;
-            margin-top: 20px;
-            background-color: #252526;
+            color: var(--text-secondary);
+            margin-top: 10px;
             padding: 20px;
+            width: 100%;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
+            background-color: var(--surface-color);
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 500px) {
+            .input-wrapper {
+                flex-direction: column;
+            }
+            input[type="submit"] {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="header-title">BiTCityLive</div>
-    <div class="header-subtitle">Tablica odjazdów na żywo</div>
+    <div class="header-container">
+        <h1 class="header-title">BiTCityLive</h1>
+        <div class="header-subtitle">Tablica odjazdów</div>
+    </div>
 
     <div class="search-container">
         <form method="POST">
@@ -121,14 +215,26 @@
                 </datalist>
 
                 <input type="text" name="stop_number" list="lista-przystankow" 
-                       placeholder="Wpisz ID lub zacznij pisać nazwę..." 
+                       placeholder="ID lub nazwa przystanku..." 
                        value="{{ stop_number }}" 
-                       autocomplete="off" required>
+                       autocomplete="off" required autofocus>
                        
                 <input type="submit" value="Szukaj">
             </div>
         </form>
     </div>
+
+    {% if not stop_number %}
+    <div class="instructions">
+        <h3>Jak korzystać z systemu?</h3>
+        <ul>
+            <li>Kliknij w pole wyszukiwania i <strong>zacznij wpisywać nazwę</strong> przystanku, aby zobaczyć podpowiedzi.</li>
+            <li>Wybierz odpowiedni kierunek z listy rozwijanej (np. <i>Wyżyny</i>).</li>
+            <li>Możesz również wpisać bezpośrednio numer słupka (np. <code>B11604</code>).</li>
+            <li>Zatwierdź przyciskiem <strong>Szukaj</strong> lub klawiszem Enter.</li>
+        </ul>
+    </div>
+    {% endif %}
 
     {% if stop_number %}
         {% if departures %}
@@ -137,7 +243,7 @@
                     <tr>
                         <th>Linia</th>
                         <th>Kierunek</th>
-                        <th>Czas</th>
+                        <th>Odjazd</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -145,14 +251,15 @@
                     <tr>
                         <td><span class="line-number">{{ dep.line }}</span></td>
                         <td>{{ dep.direction }}</td>
-                        <td><strong>{{ dep.time }}</strong></td>
+                        <td class="time-display">{{ dep.time }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% else %}
             <div class="empty-state">
-                Brak odjazdów dla przystanku <strong>{{ stop_number.split(':')[0] }}</strong>.
+                Brak odjazdów dla: <strong>{{ stop_number.split(':')[0] }}</strong>.<br>
+                Upewnij się, że wpisany numer jest poprawny.
             </div>
         {% endif %}
     {% endif %}
