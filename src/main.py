@@ -6,11 +6,17 @@ import json
 app = Flask(__name__)
 
 PRZYSTANKI = {}
-try:
-    with open('baza_bydgoszcz.json', 'r', encoding='utf-8') as f:
-        PRZYSTANKI = json.load(f)
-except FileNotFoundError:
-    print("Brak pliku baza_bydgoszcz.json!")
+
+def zaladuj_baze(sciezka):
+    try:
+        with open(sciezka, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"Brak pliku {sciezka}!")
+        return {}
+
+PRZYSTANKI.update(zaladuj_baze('baza_bydgoszcz.json'))
+PRZYSTANKI.update(zaladuj_baze('baza_torun.json'))
 
 def get_departures(stop_number: str):
     if not stop_number:

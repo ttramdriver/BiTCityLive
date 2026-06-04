@@ -6,6 +6,7 @@
     <title>BiTCityLive - Odjazdy</title>
     
     <style>
+        /* Zmienne domyślne - MOTYW JASNY */
         :root {
             --bg-color: #f9f9f9;
             --surface-color: #ffffff;
@@ -16,6 +17,7 @@
             --hover-bg: #f1f1f1;
         }
 
+        /* Automatyczne przełączenie - MOTYW CIEMNY */
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg-color: #121212;
@@ -28,11 +30,12 @@
             }
         }
 
+        /* --- Style Główne --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            max-width: 700px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
             display: flex;
@@ -42,7 +45,7 @@
 
         .header-container {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             margin-top: 20px;
         }
 
@@ -60,20 +63,32 @@
             margin-top: 5px;
         }
 
-        .search-container {
-            background-color: var(--surface-color);
-            padding: 25px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
+        /* --- Układ dwóch miast (Flexbox) --- */
+        .cities-container {
+            display: flex;
+            gap: 30px;
             width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap; /* Pozwala na zawijanie na małych ekranach */
+            margin-bottom: 40px;
+        }
+
+        .city-card {
+            flex: 1;
+            min-width: 300px; /* Minimalna szerokość na telefonach */
+            background-color: transparent;
+        }
+
+        .city-title {
+            font-size: 1.8em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: normal;
         }
 
         .input-wrapper {
             display: flex;
             gap: 10px;
-            justify-content: center;
         }
 
         input[type="text"] {
@@ -92,47 +107,42 @@
         }
 
         input[type="submit"] {
-            padding: 12px 25px;
-            background-color: var(--primary-color);
-            color: #ffffff;
-            border: none;
+            padding: 12px 20px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
         }
 
         input[type="submit"]:hover {
-            opacity: 0.9;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
         }
 
+        /* --- Instrukcja --- */
         .instructions {
-            background-color: transparent;
+            text-align: center;
             color: var(--text-secondary);
-            font-size: 0.95em;
             width: 100%;
             margin-bottom: 30px;
-            border-left: 4px solid var(--primary-color);
-            padding-left: 15px;
-            box-sizing: border-box;
         }
 
         .instructions h3 {
-            margin-top: 0;
-            font-size: 1.1em;
+            font-size: 1.5em;
             color: var(--text-main);
+            font-weight: normal;
+            margin-bottom: 15px;
         }
 
-        .instructions ul {
-            margin: 0;
-            padding-left: 20px;
+        .instructions p {
+            margin: 5px 0;
+            font-size: 1em;
         }
 
-        .instructions li {
-            margin-bottom: 5px;
-        }
-
+        /* --- Tabela z wynikami --- */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -187,15 +197,6 @@
             background-color: var(--surface-color);
             box-sizing: border-box;
         }
-
-        @media (max-width: 500px) {
-            .input-wrapper {
-                flex-direction: column;
-            }
-            input[type="submit"] {
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
@@ -205,34 +206,59 @@
         <div class="header-subtitle">Tablica odjazdów</div>
     </div>
 
-    <div class="search-container">
-        <form method="POST">
-            <div class="input-wrapper">
-                <datalist id="lista-przystankow">
-                    {% for kod, nazwa in przystanki.items() %}
-                        <option value="{{ kod }}: {{ nazwa }}"></option>
-                    {% endfor %}
-                </datalist>
+    <div class="cities-container">
+        
+        <div class="city-card">
+            <h2 class="city-title">Toruń</h2>
+            <form method="POST">
+                <div class="input-wrapper">
+                    <datalist id="lista-torun">
+                        {% for kod, nazwa in przystanki.items() %}
+                            {% if kod.startswith('T') %}
+                                <option value="{{ kod }}: {{ nazwa }}"></option>
+                            {% endif %}
+                        {% endfor %}
+                    </datalist>
 
-                <input type="text" name="stop_number" list="lista-przystankow" 
-                       placeholder="ID lub nazwa przystanku..." 
-                       value="{{ stop_number }}" 
-                       autocomplete="off" required autofocus>
-                       
-                <input type="submit" value="Szukaj">
-            </div>
-        </form>
+                    <input type="text" name="stop_number" list="lista-torun" 
+                           placeholder="ID lub nazwa przystanku..." 
+                           value="{% if stop_number and stop_number.startswith('T') %}{{ stop_number }}{% endif %}" 
+                           autocomplete="off" required>
+                           
+                    <input type="submit" value="Szukaj">
+                </div>
+            </form>
+        </div>
+
+        <div class="city-card">
+            <h2 class="city-title">Bydgoszcz</h2>
+            <form method="POST">
+                <div class="input-wrapper">
+                    <datalist id="lista-bydgoszcz">
+                        {% for kod, nazwa in przystanki.items() %}
+                            {% if kod.startswith('B') %}
+                                <option value="{{ kod }}: {{ nazwa }}"></option>
+                            {% endif %}
+                        {% endfor %}
+                    </datalist>
+
+                    <input type="text" name="stop_number" list="lista-bydgoszcz" 
+                           placeholder="ID lub nazwa przystanku..." 
+                           value="{% if stop_number and stop_number.startswith('B') %}{{ stop_number }}{% endif %}" 
+                           autocomplete="off" required>
+                           
+                    <input type="submit" value="Szukaj">
+                </div>
+            </form>
+        </div>
+
     </div>
 
     {% if not stop_number %}
     <div class="instructions">
         <h3>Jak korzystać z systemu?</h3>
-        <ul>
-            <li>Kliknij w pole wyszukiwania i <strong>zacznij wpisywać nazwę</strong> przystanku, aby zobaczyć podpowiedzi.</li>
-            <li>Wybierz odpowiedni kierunek z listy rozwijanej (np. <i>Wyżyny</i>).</li>
-            <li>Możesz również wpisać bezpośrednio numer słupka (np. <code>B11604</code>).</li>
-            <li>Zatwierdź przyciskiem <strong>Szukaj</strong> lub klawiszem Enter.</li>
-        </ul>
+        <p>Zacznij wpisywać nazwę przystanku w odpowiednim mieście, aby zobaczyć podpowiedzi.</p>
+        <p>Możesz również wpisać bezpośrednio numer słupka.</p>
     </div>
     {% endif %}
 
