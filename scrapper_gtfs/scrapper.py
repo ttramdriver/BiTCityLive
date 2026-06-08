@@ -15,26 +15,17 @@ def generuj_baze_z_gtfs(plik_wejsciowy='stops (1).txt', plik_wyjsciowy='baza_tor
             czytnik = csv.DictReader(f)
             
             for wiersz in czytnik:
-                # W poprawnym GTFS publiczne numery słupków są w 'stop_code'
-                # Na wszelki wypadek używamy .get(), by uniknąć błędów, jeśli kolumna by się inaczej nazywała
                 numer = wiersz.get('stop_id', '').strip()
-                
-                # Jeśli z jakiegoś powodu stop_code jest puste, próbujemy ratować się stop_id
                 if not numer:
                     numer = wiersz.get('stop_id', '').strip()
                     
                 nazwa = wiersz.get('stop_name', '').strip()
                 
                 if numer and nazwa:
-                    # Formatowanie nazwy: zamiana " - " na "/"
                     nowa_nazwa = nazwa.replace(' - ', '/')
-                    
-                    # Generowanie klucza (np. B11606)
                     klucz = f"{prefiks}{numer}"
                     
                     przystanki[klucz] = nowa_nazwa
-                    
-        # Zapis do pliku JSON
         with open(plik_wyjsciowy, mode='w', encoding='utf-8') as f:
             json.dump(przystanki, f, ensure_ascii=False, indent=4)
             

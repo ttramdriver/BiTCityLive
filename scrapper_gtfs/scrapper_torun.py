@@ -3,7 +3,6 @@ import json
 import os
 
 def generuj_baze_torun():
-    # Definiujemy ścieżki i prefiks dla Torunia
     script_dir = os.path.dirname(os.path.abspath(__file__))
     plik_wejsciowy = os.path.join(script_dir, 'stops (1).txt')
     plik_wyjsciowy = os.path.join(script_dir, 'baza_torun.json')
@@ -20,14 +19,12 @@ def generuj_baze_torun():
             czytnik = csv.DictReader(f)
             
             for wiersz in czytnik:
-                # Szukamy publicznego numeru słupka
                 numer = wiersz.get('stop_id', '').strip()
                     
                 nazwa = wiersz.get('stop_name', '').strip()
-                opis = wiersz.get('stop_code', '').strip() # Niektóre GTFS mają tu kierunek
+                opis = wiersz.get('stop_code', '').strip()
                 
                 if numer and nazwa:
-                    # Opcjonalne formatowanie (Torun czasami używa innych myślników, ale to uniwersalne)
                     nowa_nazwa = nazwa.replace(' - ', '/')
                     
                     if opis:

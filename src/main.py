@@ -1,33 +1,63 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import requests
 from bs4 import BeautifulSoup
 import json
+import os
 
 app = Flask(__name__)
 
+POKAZ_PRZYCISK_TRAS = False
 PRZYSTANKI = {}
 
-def zaladuj_baze(sciezka):
+def zaladuj_baze(nazwa_pliku):
+    sciezka = os.path.join(os.path.dirname(os.path.abspath(__file__)), nazwa_pliku)
     try:
         with open(sciezka, 'r', encoding='utf-8') as f:
             return json.load(f)
     except FileNotFoundError:
-        print(f"Brak pliku {sciezka}!")
         return {}
 
 PRZYSTANKI.update(zaladuj_baze('baza_bydgoszcz.json'))
 PRZYSTANKI.update(zaladuj_baze('baza_torun.json'))
 
-def get_departures(stop_number: str):
-    if not stop_number:
+UNIKALNE_NAZWY = {'T': set(), 'B': set()}
+for kod, nazwa in PRZYSTANKI.items():
+    nazwa_baza = nazwa.split('(')[0].strip()
+    if kod.startswith('T'):
+        UNIKALNE_NAZWY['T'].add(nazwa_baza)
+    elif kod.startswith('B'):
+        UNIKALNE_NAZWY['B'].add(nazwa_baza)
+
+UNIKALNE_NAZWY['T'] = sorted(list(UNIKALNE_NAZWY['T']))
+UNIKALNE_NAZWY['B'] = sorted(list(UNIKALNE_NAZWY['B']))
+
+TRASY = zaladuj_baze('trasy_bydgoszcz.json')
+
+PRZYSTANKI_LINIE = {}
+for linia, kierunki in TRASY.items():
+    for kierunek, przystanki_na_trasie in kierunki.items():
+        for p in przystanki_na_trasie:
+            kod = p['kod']
+            if kod not in PRZYSTANKI_LINIE:
+                PRZYSTANKI_LINIE[kod] = []
+            
+            wpis = f"{linia} -> {kierunek}"
+            if wpis not in PRZYSTANKI_LINIE[kod]:
+                PRZYSTANKI_LINIE[kod].append(wpis)
+
+for kod in PRZYSTANKI_LINIE:
+    PRZYSTANKI_LINIE[kod].sort(key=lambda x: int(''.join(filter(str.isdigit, x.split('->')[0]))) if any(c.isdigit() for c in x.split('->')[0]) else 999)
+
+def pobierz_odjazdy(stop_id):
+    if not stop_id:
         return []
         
-    stop_number = stop_number.upper()
+    stop_id = stop_id.upper()
     
-    if stop_number.startswith("B"):
-        url = f"http://odjazdy.zdmikp.bydgoszcz.pl/mobile/panel.aspx?previous=/mobile/search.aspx&stop={stop_number[1:]}"
-    elif stop_number.startswith("T"):
-        url = f"http://sip.um.torun.pl:8080/panels/0/default.aspx?stop={stop_number[1:]}"
+    if stop_id.startswith("B"):
+        url = f"http://odjazdy.zdmikp.bydgoszcz.pl/mobile/panel.aspx?previous=/mobile/search.aspx&stop={stop_id[1:]}"
+    elif stop_id.startswith("T"):
+        url = f"http://sip.um.torun.pl:8080/panels/0/default.aspx?stop={stop_id[1:]}"
     else:
         return []
 
@@ -39,7 +69,7 @@ def get_departures(stop_number: str):
         soup = BeautifulSoup(response.text, 'html.parser')
         rows = soup.select("tbody tr")
         
-        departures_list = []
+        odjazdy = []
         for row in rows:
             cols = row.find_all('td')
             if len(cols) >= 3:
@@ -47,29 +77,63 @@ def get_departures(stop_number: str):
                 direction = cols[1].get_text(strip=True)
                 time = cols[2].get_text(strip=True).replace('P&R', '').replace('>>', 'Odjeżdża!')
                 
-                departures_list.append({
+                odjazdy.append({
                     'line': line,
                     'direction': direction,
                     'time': time
                 })
-        return departures_list
-    except Exception as e:
-        print(f"Błąd pobierania danych: {e}")
+        return odjazdy
+    except Exception:
         return []
+
+@app.route('/sw.js')
+def serve_sw():
+    return send_from_directory('static', 'sw.js', mimetype='application/javascript')
+
+@app.route('/manifest.json')
+def serve_manifest():
+    return send_from_directory('static', 'manifest.json')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    departures = []
-    raw_input = ""
+    departures = None
+    stop_number = None
+    matching_stops = None
     
     if request.method == 'POST':
         raw_input = request.form.get('stop_number', '').strip()
+        stop_number = raw_input
         
-        if raw_input:
-            clean_stop_number = raw_input.split(':')[0].strip()
-            departures = get_departures(clean_stop_number)
+        if ':' in raw_input:
+            stop_id = raw_input.split(':')[0].strip()
+            departures = pobierz_odjazdy(stop_id)
             
-    return render_template('index.html', departures=departures, stop_number=raw_input, przystanki=PRZYSTANKI)
+        else:
+            search_query = raw_input.lower()
+            matching_stops = []
+            
+            for kod, nazwa in PRZYSTANKI.items():
+                nazwa_baza = nazwa.split('(')[0].strip().lower()
+                
+                if search_query in nazwa_baza:
+                    linie_kierunki = PRZYSTANKI_LINIE.get(kod, [])
+                    matching_stops.append({
+                        'kod': kod,
+                        'nazwa': nazwa,
+                        'linie_kierunki': linie_kierunki
+                    })
+                    
+            if not matching_stops:
+                departures = [] 
+                
+    return render_template('index.html', 
+                           departures=departures, 
+                           stop_number=stop_number, 
+                           przystanki=PRZYSTANKI, 
+                           trasy=TRASY,
+                           matching_stops=matching_stops,
+                           unikalne_nazwy=UNIKALNE_NAZWY,
+                           pokaż_przycisk_tras=POKAZ_PRZYCISK_TRAS)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
