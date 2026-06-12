@@ -74,14 +74,14 @@
         {
             background-color: var(--alert-color);
             border: 5px solid var(--alert-border-color);
-            margin-left: auto;
-            margin-right: auto;
+
             margin-top: 25px;
             margin-bottom: -5px;
             border-radius: 8px;
             padding: 15px 20px 15px 20px;
             text-align: left;
-            width: 85%;
+            max-width: 900px;
+            width: calc(100% - 50px);
         }
 
         .infobox-technical-issues-title
@@ -95,7 +95,7 @@
         .infobox-technical-issues-title svg
         {
             display: inline;
-            margin: -4px 6px 0px 0px;
+            margin: -2px 6px 0px 0px;
         }
 
         .cities-container {
@@ -487,7 +487,7 @@
             Mniej więcej od początku czerwca 2026 serwery odjazdów na żywo Zarządu Dróg Miejskich i Komunikacji Publicznej w Bydgoszczy 
             (<a href="http://odjazdy.zdmikp.bydgoszcz.pl">http://odjazdy.zdmikp.bydgoszcz.pl</a>) poddane są przerwie technicznej, 
             z tego powodu niemożliwym jest uzyskanie z nich danych o odjazdach na żywo, co onacza, 
-            że aktualnie odjazdy na żywo Bydgoskiego MZK nie są wyświetlane.
+            że aktualnie nie są one wyświetlane.
             <br>Za utrudnienia przepraszamy!
         </article>
     </header>
@@ -534,6 +534,23 @@
                                autocomplete="off" required>
                         <span class="clear-btn" id="clear-torun" onclick="clearInput('input-torun')">&times;</span>
                         <div id="autocomplete-list-torun" class="autocomplete-items"></div>
+                    </div>
+                    <input type="submit" value="Szukaj">
+                </div>
+            </form>
+        </article>
+
+        <article class="city-card"> 
+            <h2 class="city-title">Pociągi [WiP, placeholder]</h2>
+            <form {#method="POST"#}>
+                <div class="input-wrapper">
+                    <div class="autocomplete-container">
+                        <input type="text" id="input-torun" name="stop_number"
+                               placeholder="ID lub nazwa przystanku..."
+                               {# value="{% if stop_number and stop_number.startswith('T') %}{{ stop_number }}{% endif %}" #}
+                               autocomplete="off" required>
+                        <span class="clear-btn" id="clear-torun" onclick="clearInput('input-torun')">&times;</span>
+                        {# <div id="autocomplete-list-torun" class="autocomplete-items"></div> #}
                     </div>
                     <input type="submit" value="Szukaj">
                 </div>
@@ -593,8 +610,8 @@
             
         {% else %}
             <div class="empty-state">
-                Brak odjazdów lub nie znaleziono przystanku dla: <strong>{{ stop_number.split(':')[0] }}</strong>.<br>
-                Upewnij się, że wpisana nazwa jest poprawna.
+                Brak odjazdów lub nie znaleziono przystanku dla: <strong>{{ stop_number.split(': ')[1] }}</strong> (ID: {{stop_number.split(':')[0]}}).<br>
+                Upewnij się, że wpisana nazwa lub ID jest poprawne.
             </div>
         {% endif %}
     {% endif %}
