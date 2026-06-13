@@ -10,7 +10,6 @@ def generuj_baze_z_gtfs(plik_wejsciowy='stops (1).txt', plik_wyjsciowy='baza_tor
         return
 
     try:
-        # Pliki GTFS są zawsze kodowane w UTF-8
         with open(plik_wejsciowy, mode='r', encoding='utf-8') as f:
             czytnik = csv.DictReader(f)
             

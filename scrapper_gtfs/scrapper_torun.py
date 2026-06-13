@@ -37,7 +37,7 @@ def generuj_baze_torun():
         with open(plik_wyjsciowy, mode='w', encoding='utf-8') as f:
             json.dump(przystanki, f, ensure_ascii=False, indent=4)
             
-        print(f"Sukces! Zapisano {len(przystanki)} toruńskich przystanków do pliku baza_torun.json.")
+        print(f"Sukces! Zapisano {len(przystanki)} przystankó do pliku.")
         
     except Exception as e:
         print(f"Wystąpił błąd podczas konwersji: {e}")
