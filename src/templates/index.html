@@ -1,457 +1,449 @@
-<!DOCTYPE html> 
- <html lang="pl"> 
- <head> 
-     <meta charset="UTF-8"> 
-     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
-     <meta name="description" content="BiTCityLive - Odjazdy na żywo dla komunikacji miejskiej w Bydgoszczy, Toruniu oraz pociągów w województwie kujawsko-pomorskim. Aktualne rozkłady i trasy.">
-     <meta name="keywords" content="komunikacja miejska, bydgoszcz, toruń, mzk, zdmikp, odjazdy na żywo, pociągi, rozkład jazdy">
-     <title>BiTCityLive - Komunikacja miejska na żywo</title> 
-     <meta name="google-site-verification" content="jEyP32ltzy3C9aCqO60wz6_yS6UZZimv6PaN7-iMV8I" />
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BiTCityLive - Komunikacja miejska na żywo</title>
     
-     <style> 
-         :root { 
-             --bg-color: #f9f9f9; 
-             --surface-color: #ffffff; 
-             --primary-color: #2e7d32; 
-             --text-main: #1a1a1a; 
-             --text-secondary: #555555; 
-             --border-color: #dddddd; 
-             --hover-bg: #f1f1f1; 
-             --alert-color: #ffb300bb; 
-             --alert-border-color: #ffb300; 
-         } 
+    <style>
+        :root {
+            --bg-color: #f9f9f9;
+            --surface-color: #ffffff;
+            --primary-color: #2e7d32;
+            --text-main: #1a1a1a;
+            --text-secondary: #555555;
+            --border-color: #dddddd;
+            --hover-bg: #f1f1f1;
+            --alert-color: #ffb300bb;
+            --alert-border-color: #ffb300;
+        }
 
-         @media (prefers-color-scheme: dark) { 
-             :root { 
-                 --bg-color: #121212; 
-                 --surface-color: #1e1e1e; 
-                 --primary-color: #4CAF50; 
-                 --text-main: #ffffff; 
-                 --text-secondary: #a0a0a0; 
-                 --border-color: #333333; 
-                 --hover-bg: #2a2d2e; 
-                 --alert-color: #f3a300dd; 
-                 --alert-border-color: #f3a300; 
-             } 
-         } 
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --surface-color: #1e1e1e;
+                --primary-color: #4CAF50;
+                --text-main: #ffffff;
+                --text-secondary: #a0a0a0;
+                --border-color: #333333;
+                --hover-bg: #2a2d2e;
+                --alert-color: #f3a300dd;
+                --alert-border-color: #f3a300;
+            }
+        }
 
-         html { 
-             background-color: var(--bg-color); 
-             /*height: 100%;*/ 
-         } 
+        html {
+            background-color: var(--bg-color);
+        }
 
-         body { 
-             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-             background-color: var(--bg-color); 
-             color: var(--text-main); 
-             max-width: 1200px; 
-             margin: 0 auto; 
-             padding: 20px; 
-             display: flex; 
-             flex-direction: column; 
-             align-items: center; 
-             min-height: 100%; 
-         } 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100%;
+        }
 
-         .header-container { 
-             text-align: center; 
-             margin-bottom: 40px; 
-             margin-top: 20px; 
-         } 
+        .header-container {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
 
-         .header-title { 
-             color: var(--primary-color); 
-             font-size: 3em; 
-             margin: 0; 
-             font-weight: bold; 
-             letter-spacing: 1px; 
-         } 
+        .header-title {
+            color: var(--primary-color);
+            font-size: 3em;
+            margin: 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
 
-         .header-subtitle { 
-             color: var(--text-secondary); 
-             font-size: 1.1em; 
-             margin-top: 5px; 
-         } 
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            margin-top: 5px;
+        }
 
-         .infobox-technical-issues 
-         { 
-             background-color: var(--alert-color); 
-             border: 5px solid var(--alert-border-color); 
+        .infobox-technical-issues {
+            background-color: var(--alert-color);
+            border: 5px solid var(--alert-border-color);
+            margin-top: 25px;
+            margin-bottom: -5px;
+            border-radius: 8px;
+            padding: 15px 20px 15px 20px;
+            text-align: left;
+            max-width: 900px;
+            width: calc(100% - 50px);
+        }
 
-             margin-top: 25px; 
-             margin-bottom: -5px; 
-             border-radius: 8px; 
-             padding: 15px 20px 15px 20px; 
-             text-align: left; 
-             max-width: 900px; 
-             width: calc(100% - 50px); 
-         } 
+        .infobox-technical-issues-title {
+            display: flex;
+            font-size: 20px;
+            font-weight: bold;
+            padding-bottom: 4px;
+        }
 
-         .infobox-technical-issues-title 
-         { 
-             display: flex; 
-             font-size: 20px; 
-             font-weight: bold; 
-             padding-bottom: 4px; 
-         } 
+        .infobox-technical-issues-title svg {
+            display: inline;
+            margin: -2px 6px 0px 0px;
+        }
 
-         .infobox-technical-issues-title svg 
-         { 
-             display: inline; 
-             margin: -2px 6px 0px 0px; 
-         } 
+        .cities-container {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
 
-         .cities-container { 
-             display: flex; 
-             gap: 30px; 
-             width: 100%; 
-             justify-content: center; 
-             flex-wrap: wrap; 
-             margin-bottom: 40px; 
-         } 
+        .city-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: transparent;
+        }
 
-         .city-card { 
-             flex: 1; 
-             min-width: 300px; 
-             background-color: transparent; 
-         } 
+        .city-title {
+            font-size: 1.8em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: normal;
+        }
 
-         .city-title { 
-             font-size: 1.8em; 
-             margin-top: 0; 
-             margin-bottom: 15px; 
-             font-weight: normal; 
-         } 
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
 
-         .input-wrapper { 
-             display: flex; 
-             gap: 10px; 
-         } 
+        .autocomplete-container {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            width: 100%;
+        }
 
-         .autocomplete-container { 
-             position: relative; 
-             flex-grow: 1; 
-             display: flex; 
-             width: 100%; 
-         } 
+        .autocomplete-container input[type="text"] {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-size: 16px;
+        }
 
-         .autocomplete-container input[type="text"] { 
-             width: 100%; 
-             padding: 12px 45px 12px 15px; 
-             border: 1px solid var(--border-color); 
-             border-radius: 4px; 
-             background-color: var(--bg-color); 
-             color: var(--text-main); 
-             font-size: 16px; 
-         } 
+        .autocomplete-container input[type="text"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
 
-         .autocomplete-container input[type="text"]:focus { 
-             border-color: var(--primary-color); 
-             outline: none; 
-         } 
+        .clear-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: none;
+            line-height: 1;
+            user-select: none;
+            transition: color 0.2s;
+        }
 
-         .clear-btn { 
-             position: absolute; 
-             right: 15px; 
-             top: 50%; 
-             transform: translateY(-50%); 
-             font-size: 24px; 
-             color: var(--text-secondary); 
-             cursor: pointer; 
-             display: none; 
-             line-height: 1; 
-             user-select: none; 
-             transition: color 0.2s; 
-         } 
+        .clear-btn:hover {
+            color: var(--primary-color);
+        }
 
-         .clear-btn:hover { 
-             color: var(--primary-color); 
-         } 
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 250px;
+            overflow-y: auto;
+            background-color: var(--surface-color);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border-radius: 0 0 8px 8px;
+            display: none;
+        }
 
-         .autocomplete-items { 
-             position: absolute; 
-             border: 1px solid var(--border-color); 
-             border-top: none; 
-             z-index: 99; 
-             top: 100%; 
-             left: 0; 
-             right: 0; 
-             max-height: 250px; 
-             overflow-y: auto; 
-             background-color: var(--surface-color); 
-             box-shadow: 0 8px 16px rgba(0,0,0,0.15); 
-             border-radius: 0 0 8px 8px; 
-             display: none; 
-         } 
+        .autocomplete-items div {
+            padding: 12px 15px;
+            cursor: pointer;
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 16px;
+        }
 
-         .autocomplete-items div { 
-             padding: 12px 15px; 
-             cursor: pointer; 
-             background-color: var(--surface-color); 
-             border-bottom: 1px solid var(--border-color); 
-             color: var(--text-main); 
-             font-size: 16px; 
-         } 
+        .autocomplete-items div:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
 
-         .autocomplete-items div:hover { 
-             background-color: var(--hover-bg); 
-             color: var(--primary-color); 
-         } 
+        .autocomplete-items div:last-child {
+            border-bottom: none;
+        }
 
-         .autocomplete-items div:last-child { 
-             border-bottom: none; 
-         } 
+        input[type="submit"] {
+            padding: 12px 20px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
 
-         input[type="submit"] { 
-             padding: 12px 20px; 
-             background-color: var(--bg-color); 
-             color: var(--text-main); 
-             border: 1px solid var(--border-color); 
-             border-radius: 4px; 
-             cursor: pointer; 
-             font-size: 16px; 
-             transition: all 0.2s; 
-         } 
+        input[type="submit"]:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
 
-         input[type="submit"]:hover { 
-             border-color: var(--primary-color); 
-             color: var(--primary-color); 
-         } 
+        .instructions {
+            text-align: center;
+            color: var(--text-secondary);
+            width: 100%;
+            margin-bottom: 30px;
+        }
 
-         .instructions { 
-             text-align: center; 
-             color: var(--text-secondary); 
-             width: 100%; 
-             margin-bottom: 30px; 
-         } 
+        .instructions h3 {
+            font-size: 1.5em;
+            color: var(--text-main);
+            font-weight: normal;
+            margin-bottom: 15px;
+        }
 
-         .instructions h3 { 
-             font-size: 1.5em; 
-             color: var(--text-main); 
-             font-weight: normal; 
-             margin-bottom: 15px; 
-         } 
+        .instructions p {
+            margin: 5px 0;
+            font-size: 1em;
+        }
 
-         .instructions p { 
-             margin: 5px 0; 
-             font-size: 1em; 
-         } 
+        .empty-state {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 10px;
+            padding: 20px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--surface-color);
+            box-sizing: border-box;
+        }
 
-         .empty-state { 
-             text-align: center; 
-             color: var(--text-secondary); 
-             margin-top: 10px; 
-             padding: 20px; 
-             width: 100%; 
-             border: 1px solid var(--border-color); 
-             border-radius: 8px; 
-             background-color: var(--surface-color); 
-             box-sizing: border-box; 
-         } 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--surface-color);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
 
-         table { 
-             width: 100%; 
-             border-collapse: collapse; 
-             background-color: var(--surface-color); 
-             border-radius: 8px; 
-             overflow: hidden; 
-             border: 1px solid var(--border-color); 
-         } 
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-         th, td { 
-             padding: 15px; 
-             text-align: left; 
-             border-bottom: 1px solid var(--border-color); 
-         } 
+        th {
+            background-color: var(--bg-color);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
 
-         th { 
-             background-color: var(--bg-color); 
-             color: var(--text-secondary); 
-             font-weight: 600; 
-             font-size: 0.9em; 
-             text-transform: uppercase; 
-         } 
+        tr:last-child td {
+            border-bottom: none;
+        }
 
-         tr:last-child td { 
-             border-bottom: none; 
-         } 
+        tr:hover td {
+            background-color: var(--hover-bg);
+        }
 
-         tr:hover td { 
-             background-color: var(--hover-bg); 
-         } 
+        .line-number {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
 
-         .line-number { 
-             background-color: var(--primary-color); 
-             color: #ffffff; 
-             padding: 4px 8px; 
-             border-radius: 4px; 
-             font-weight: bold; 
-         } 
+        .time-display {
+            font-weight: bold;
+        }
 
-         .time-display { 
-             font-weight: bold; 
-         } 
+        .toggle-routes-btn {
+            background-color: var(--surface-color);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            width: 100%;
+        }
 
-         .toggle-routes-btn { 
-             background-color: var(--surface-color); 
-             color: var(--primary-color); 
-             border: 1px solid var(--primary-color); 
-             padding: 10px 20px; 
-             border-radius: 4px; 
-             cursor: pointer; 
-             font-weight: bold; 
-             margin-top: 20px; 
-             width: 100%; 
-         } 
+        #routes-browser {
+            display: none;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
 
-         #routes-browser { 
-             display: none; 
-             background-color: var(--surface-color); 
-             border: 1px solid var(--border-color); 
-             border-radius: 8px; 
-             padding: 20px; 
-             margin-top: 15px; 
-             width: 100%; 
-             box-sizing: border-box; 
-         } 
+        .lines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+        }
 
-         .lines-grid { 
-             display: grid; 
-             grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); 
-             gap: 10px; 
-         } 
+        .line-badge {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 15px 0;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
 
-         .line-badge { 
-             background-color: var(--bg-color); 
-             color: var(--text-main); 
-             border: 1px solid var(--border-color); 
-             padding: 15px 0; 
-             text-align: center; 
-             border-radius: 8px; 
-             font-weight: bold; 
-             font-size: 1.2em; 
-             cursor: pointer; 
-         } 
+        .line-badge:hover { 
+            border-color: var(--primary-color); 
+            color: var(--primary-color); 
+        }
 
-         .line-badge:hover {  
-             border-color: var(--primary-color);  
-             color: var(--primary-color);  
-         } 
+        .direction-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            font-size: 1.1em;
+            cursor: pointer;
+        }
 
-         .direction-btn { 
-             display: block; 
-             width: 100%; 
-             text-align: left; 
-             padding: 15px; 
-             background-color: var(--bg-color); 
-             border: 1px solid var(--border-color); 
-             border-radius: 8px; 
-             margin-bottom: 10px; 
-             color: var(--text-main); 
-             font-size: 1.1em; 
-             cursor: pointer; 
-         } 
+        .direction-btn:hover { 
+            border-color: var(--primary-color); 
+        }
 
-         .direction-btn:hover {  
-             border-color: var(--primary-color);  
-         } 
+        .route-timeline {
+            border-left: 3px solid #e0e0e0;
+            margin-left: 20px;
+            padding-left: 25px;
+            margin-top: 20px;
+        }
 
-         .route-timeline { 
-             border-left: 3px solid #e0e0e0; 
-             margin-left: 20px; 
-             padding-left: 25px; 
-             margin-top: 20px; 
-         } 
+        .route-stop {
+            position: relative;
+            padding: 15px 0;
+            cursor: pointer;
+            color: var(--text-main);
+            font-size: 1.1em;
+            border-bottom: 1px solid var(--bg-color);
+        }
 
-         .route-stop { 
-             position: relative; 
-             padding: 15px 0; 
-             cursor: pointer; 
-             color: var(--text-main); 
-             font-size: 1.1em; 
-             border-bottom: 1px solid var(--bg-color); 
-         } 
+        .route-stop:hover { 
+            color: var(--primary-color); 
+        }
 
-         .route-stop:hover {  
-             color: var(--primary-color);  
-         } 
+        .route-stop::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 3px solid #d32f2f;
+            background: var(--surface-color);
+        }
 
-         .route-stop::before { 
-             content: ''; 
-             position: absolute; 
-             left: -33px; 
-             top: 50%; 
-             transform: translateY(-50%); 
-             width: 14px; 
-             height: 14px; 
-             border-radius: 50%; 
-             border: 3px solid #d32f2f; 
-             background: var(--surface-color); 
-         } 
+        .browser-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-         .browser-header { 
-             display: flex; 
-             justify-content: space-between; 
-             align-items: center; 
-             margin-bottom: 20px; 
-         } 
+        .back-btn { 
+            background: none; 
+            border: none; 
+            color: var(--primary-color); 
+            cursor: pointer; 
+            font-size: 1em; 
+            font-weight: bold; 
+        }
 
-         .back-btn {  
-             background: none;  
-             border: none;  
-             color: var(--primary-color);  
-             cursor: pointer;  
-             font-size: 1em;  
-             font-weight: bold;  
-         } 
+        .matching-stops-container {
+            width: 100%;
+            margin-top: 10px;
+        }
 
-         .matching-stops-container { 
-             width: 100%; 
-             margin-top: 10px; 
-         } 
+        .stop-group-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
 
-         .stop-group-card { 
-             background-color: var(--surface-color); 
-             border: 1px solid var(--border-color); 
-             border-radius: 8px; 
-             padding: 15px 20px; 
-             margin-bottom: 15px; 
-             cursor: pointer; 
-             transition: all 0.2s; 
-             box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-         } 
+        .stop-group-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
-         .stop-group-card:hover { 
-             border-color: var(--primary-color); 
-             box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-         } 
+        .stop-group-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
 
-         .stop-group-title { 
-             font-size: 1.3em; 
-             font-weight: bold; 
-             color: var(--primary-color); 
-             margin-bottom: 10px; 
-         } 
+        .stop-group-lines {
+            font-size: 0.95em;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
 
-         .stop-group-lines { 
-             font-size: 0.95em; 
-             color: var(--text-main); 
-             line-height: 1.6; 
-         } 
+        .inline-route {
+            display: inline-block;
+            margin-right: 12px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
 
-         .inline-route { 
-             display: inline-block; 
-             margin-right: 12px; 
-             color: var(--text-secondary); 
-         } 
-     </style> 
- </head> 
- <body> 
-
-     <header class="header-container"> 
-         <h1 class="header-title">BiTCityLive</h1> 
-         <span class="header-subtitle">Komunikacja miejska i podmiejska na żywo</span> 
-         <article class="infobox-technical-issues" hidden> 
+    <header class="header-container">
+        <h1 class="header-title">BiTCityLive</h1>
+        <span class="header-subtitle">Komunikacja miejska i podmiejska na żywo</span>
+        <article class="infobox-technical-issues"> 
              <span class="infobox-technical-issues-title"> 
                  <svg 
                      xmlns="http://www.w3.org/2000/svg" 
@@ -489,378 +481,372 @@
                          67-41.39 41.39-67 98.58-67 161.74 0 63.16 25.61 120.35 67 161.74 41.39 41.39 98.58 67 161.74 67 63.16 
                          0 120.35-25.61 161.74-67 41.39-41.39 67-98.58 67-161.74 0-63.16-25.61-120.35-67-161.74z" 
                      /> 
-                 </svg><span>Brak odjadów MZK Bydgoszcz!</span></span> 
+                 </svg><span>UWAGA! Zmiany tras komunikacji miejskiej w Bydgoszczy!</span></span> 
 
-             Mniej więcej od początku czerwca 2026 serwery odjazdów na 
-żywo Zarządu Dróg Miejskich i Komunikacji Publicznej w Bydgoszczy  
+            Od dnia 27.06.2026 r. do połowy sierpnia(planowo) jest prowadzony remont rozjazdów na Rondzie Fordońskim.
+            W związku z tym ruch tramwajowy jest wstrzymany na odcinku Rondo Jagiellonów - Rondo Fordońskie. Fragment
+            ten jest obsługiwany przez autobusy zastępcze(linia ZaT). Zmiany obejmują linie tramwajowe: 3, 4, 5, 6, 8, 10.
+            Więcej informacji na 
 
-             (<a 
-href="http://odjazdy.zdmikp.bydgoszcz.pl">http://odjazdy.zdmikp.bydgoszcz.pl</a>)
- poddane są przerwie technicznej,  
-             z tego powodu niemożliwym jest uzyskanie z nich danych o odjazdach na żywo, co onacza,  
-             że aktualnie nie są one wyświetlane. 
-             <br>Za utrudnienia przepraszamy! 
-         </article> 
-     </header> 
+            <a href="https://zdmikp.bydgoszcz.pl/pl/drogi-miejskie/9391-rozpoczyna-sie-remont-torowiska-na-rondzie-fordonskim?fbclid=IwY2xjawSseRdleHRuA2FlbQIxMABicmlkETBiR0Y2WldzaVcwYlRXRXAyc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHh1Sx97F4Qq9KhKZHHMEEdxv6k9P9OXJKVdM7uN5Ae3aQTiPVRJHjpQPdaNV_aem_8MAEsrGvUmWfsIfEqXJDTw">stronie ZDMiKP Bydgoszcz</a>.
+        </article> 
+    </header> 
 
-     <section class="cities-container"> 
-         <article class="city-card"> 
-             <h2 class="city-title">Bydgoszcz</h2> 
-             <form method="POST"> 
-                 <div class="input-wrapper"> 
-                     <div class="autocomplete-container"> 
-                         <input type="text" id="input-bydgoszcz" name="stop_number"  
-                                placeholder="ID lub nazwa przystanku..."  
-                                value="{% if stop_number and stop_number.startswith('B') %}{{ stop_number }}{% endif %}"  
-                                autocomplete="off" required> 
+    <section class="cities-container">
+        <article class="city-card">
+            <h2 class="city-title">Bydgoszcz</h2>
+            <form method="POST">
+                <div class="input-wrapper">
+                    <div class="autocomplete-container">
+                        <input type="text" id="input-bydgoszcz" name="stop_number" 
+                               placeholder="ID lub nazwa przystanku..." 
+                               value="{% if stop_number and stop_number.startswith('B') %}{{ stop_number }}{% endif %}" 
+                               autocomplete="off" required>
+                        <span class="clear-btn" id="clear-bydgoszcz" onclick="clearInput('input-bydgoszcz')">&times;</span>
+                        <div id="autocomplete-list-bydgoszcz" class="autocomplete-items"></div>
+                    </div>
+                    <input type="submit" value="Szukaj">
+                </div>
+            </form>
 
-                         <span class="clear-btn" id="clear-bydgoszcz"
- onclick="clearInput('input-bydgoszcz')">&times;</span> 
-                         <div id="autocomplete-list-bydgoszcz" class="autocomplete-items"></div> 
-                     </div> 
-                     <input type="submit" value="Szukaj"> 
-                 </div> 
-             </form> 
+            {% if trasy and pokaz_przycisk_tras %}
+            <button type="button" class="toggle-routes-btn" onclick="toggleBrowser()">Pokaż listę linii i tras</button>
 
-             {% if trasy and pokaz_przycisk_tras %} 
+            <div id="routes-browser">
+                <div class="browser-header">
+                    <h3 id="browser-title" style="margin: 0;">Wybierz linię</h3>
+                    <button type="button" class="back-btn" id="browser-back" onclick="goBack()" style="display: none;">&larr; Wróć</button>
+                </div>
+                <div id="browser-content"></div> 
+            </div>
+            {% endif %}
 
-             <button type="button" class="toggle-routes-btn" 
-onclick="toggleBrowser()">Pokaż listę linii i tras</button> 
+        </article>
 
-             <div id="routes-browser"> 
-                 <div class="browser-header"> 
-                     <h3 id="browser-title" style="margin: 0;">Wybierz linię</h3> 
+        <article class="city-card">
+            <h2 class="city-title">Toruń</h2>
+            <form method="POST">
+                <div class="input-wrapper">
+                    <div class="autocomplete-container">
+                        <input type="text" id="input-torun" name="stop_number"
+                               placeholder="ID lub nazwa przystanku..."
+                               value="{% if stop_number and stop_number.startswith('T') %}{{ stop_number }}{% endif %}"
+                               autocomplete="off" required>
+                        <span class="clear-btn" id="clear-torun" onclick="clearInput('input-torun')">&times;</span>
+                        <div id="autocomplete-list-torun" class="autocomplete-items"></div>
+                    </div>
+                    <input type="submit" value="Szukaj">
+                </div>
+            </form>
+        </article>
 
-                     <button type="button" class="back-btn" 
-id="browser-back" onclick="goBack()" style="display: 
-none;">&larr; Wróć</button> 
-                 </div> 
-                 <div id="browser-content"></div>  
-             </div> 
-             {% endif %} 
+        <article class="city-card"> 
+            <h2 class="city-title">Pociągi</h2>
+            <form method="POST">
+                <div class="input-wrapper">
+                    <div class="autocomplete-container">
+                        <input type="text" id="input-pociagi" name="stop_number"
+                               placeholder="ID lub nazwa przystanku..."
+                               value="{% if stop_number and stop_number.startswith('P') %}{{ stop_number }}{% endif %}"
+                               autocomplete="off" required>
+                        <span class="clear-btn" id="clear-pociagi" onclick="clearInput('input-pociagi')">&times;</span>
+                        <div id="autocomplete-list-pociagi" class="autocomplete-items"></div>
+                    </div>
+                    <input type="submit" value="Szukaj">
+                </div>
+            </form>
+        </article>
 
-         </article> 
+    </section>
 
-         <article class="city-card"> 
-             <h2 class="city-title">Toruń</h2> 
-             <form method="POST"> 
-                 <div class="input-wrapper"> 
-                     <div class="autocomplete-container"> 
-                         <input type="text" id="input-torun" name="stop_number" 
-                                placeholder="ID lub nazwa przystanku..." 
-                                value="{% if stop_number and stop_number.startswith('T') %}{{ stop_number }}{% endif %}" 
-                                autocomplete="off" required> 
+    {% if not stop_number %}
+    <div class="instructions">
+        <h3>Jak korzystać z systemu?</h3>
+        <p>Zacznij wpisywać nazwę przystanku w odpowiednim mieście, aby zobaczyć podpowiedzi.</p>
+        <p>Możesz również wpisać bezpośrednio numer słupka.</p>
+    </div>
+    {% endif %}
 
-                         <span class="clear-btn" id="clear-torun" 
-onclick="clearInput('input-torun')">&times;</span> 
-                         <div id="autocomplete-list-torun" class="autocomplete-items"></div> 
-                     </div> 
-                     <input type="submit" value="Szukaj"> 
-                 </div> 
-             </form> 
-         </article> 
+    {% if stop_number %}
+        {% if matching_stops %}
+            <div class="matching-stops-container">
+                <h3 style="color: var(--text-secondary); font-weight: normal; margin-bottom: 20px;">Wybierz konkretny słupek z węzła:</h3>
+                
+                {% for stop in matching_stops %}
+                <div class="stop-group-card" onclick="submitExactStop('{{ stop.kod }}: {{ stop.nazwa }}')">
+                    <div class="stop-group-title">{{ stop.nazwa }}</div>
+                    <div class="stop-group-lines">
+                        {% if stop.linie_kierunki %}
+                            {% for l in stop.linie_kierunki %}
+                                <span class="inline-route">{{ l }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="inline-route" style="font-style: italic;">Brak zdefiniowanych linii</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
 
-         <article class="city-card">  
-             <h2 class="city-title">Pociągi [WiP, placeholder]</h2> 
-             <form method="POST"> 
-                 <div class="input-wrapper"> 
-                     <div class="autocomplete-container"> 
-                         <input type="text" id="input-pociagi" name="stop_number" 
-                                placeholder="ID lub nazwa przystanku..." 
-                                value="{% if stop_number and stop_number.startswith('P') %}{{ stop_number }}{% endif %}" 
-                                autocomplete="off" required> 
+        {% elif departures %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>{% if stop_number and stop_number.startswith('P') %}Numer pociągu{% else %}Linia{% endif %}</th>
+                        {% if stop_number and stop_number.startswith('P') %}
+                        <th>Peron, Tor</th>
+                        {% endif %}
+                        <th>Kierunek</th>
+                        <th>Odjazd</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dep in departures %}
+                    <tr>
+                        <td><span class="line-number">{{ dep.line }}</span></td>
+                        {% if stop_number and stop_number.startswith('P') %}
+                        <td>
+                            {% if dep.platform %}Peron {{ dep.platform }}{% endif %}{% if dep.track %}, Tor {{ dep.track }}{% endif %}
+                        </td>
+                        {% endif %}
+                        <td>{{ dep.direction }}</td>
+                        <td class="time-display">{{ dep.time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        {% else %}
+            <div class="empty-state">
+                Brak odjazdów lub nie znaleziono przystanku dla: <strong>{{ stop_number.split(': ')[1] }}</strong> (ID: {{stop_number.split(':')[0]}}).<br>
+                Upewnij się, że wpisana nazwa lub ID jest poprawne.
+            </div>
+        {% endif %}
+    {% endif %}
 
-                         <span class="clear-btn" id="clear-pociagi" 
-onclick="clearInput('input-pociagi')">&times;</span> 
-                         <div id="autocomplete-list-pociagi" class="autocomplete-items"></div> 
-                     </div> 
-                     <input type="submit" value="Szukaj"> 
-                 </div> 
-             </form> 
-         </article> 
+    <script>
+        function toggleClearBtn(inputElement) {
+            const clearBtn = inputElement.nextElementSibling;
+            if (inputElement.value.length > 0) {
+                clearBtn.style.display = 'block';
+            } else {
+                clearBtn.style.display = 'none';
+            }
+        }
 
-     </section> 
+        function clearInput(inputId) {
+            const inputElement = document.getElementById(inputId);
+            inputElement.value = '';
+            toggleClearBtn(inputElement);
+            inputElement.focus();
+        }
 
-     {% if not stop_number %} 
-     <div class="instructions"> 
-         <h3>Jak korzystać z systemu?</h3> 
-         <p>Zacznij wpisywać nazwę przystanku w odpowiednim mieście, aby zobaczyć podpowiedzi.</p> 
-         <p>Możesz również wpisać bezpośrednio numer słupka.</p> 
-     </div> 
-     {% endif %} 
+        function submitExactStop(exactValue) {
+            let inputId = 'input-bydgoszcz';
+            if (exactValue.startsWith('T')) {
+                inputId = 'input-torun';
+            } else if (exactValue.startsWith('P')) {
+                inputId = 'input-pociagi';
+            }
+            let inputEl = document.getElementById(inputId);
+            
+            if(inputEl) {
+                inputEl.value = exactValue; 
+                inputEl.closest('form').submit(); 
+            }
+        }
 
-     {% if stop_number %} 
-         {% if matching_stops %} 
-             <div class="matching-stops-container"> 
+        const torunStops = {{ unikalne_nazwy['T'] | tojson | safe }};
+        const bydgoszczStops = {{ unikalne_nazwy['B'] | tojson | safe }};
+        const pociagiStops = {{ unikalne_nazwy['P'] | default('[]') | tojson | safe }};
 
-                 <h3 style="color: var(--text-secondary); 
-font-weight: normal; margin-bottom: 20px;">Wybierz konkretny słupek z
- węzła:</h3> 
-                  
-                 {% for stop in matching_stops %} 
-                 <div class="stop-group-card" onclick="submitExactStop('{{ stop.kod }}: {{ stop.nazwa }}')"> 
-                     <div class="stop-group-title">{{ stop.nazwa }}</div> 
-                     <div class="stop-group-lines"> 
-                         {% if stop.linie_kierunki %} 
-                             {% for l in stop.linie_kierunki %} 
-                                 <span class="inline-route">{{ l }}</span> 
-                             {% endfor %} 
-                         {% else %} 
+        function usunOgonki(text) {
+            return text.normalize("NFD")
+                       .replace(/[\u0300-\u036f]/g, "")
+                       .replace(/ł/g, "l")
+                       .replace(/Ł/g, "L");
+        }
 
-                             <span class="inline-route" 
-style="font-style: italic;">Brak zdefiniowanych linii (lub przystanek
- z Torunia)</span> 
-                         {% endif %} 
-                     </div> 
-                 </div> 
-                 {% endfor %} 
-             </div> 
+        function setupAutocomplete(inputId, arr, listId) {
+            const inp = document.getElementById(inputId);
+            const listContainer = document.getElementById(listId);
 
-         {% elif departures %} 
-             <table> 
-                 <thead> 
-                     <tr> 
-                         <th>Linia</th> 
-                         <th>Kierunek</th> 
-                         <th>Odjazd</th> 
-                     </tr> 
-                 </thead> 
-                 <tbody> 
-                     {% for dep in departures %} 
-                     <tr> 
-                         <td><span class="line-number">{{ dep.line }}</span></td> 
-                         <td>{{ dep.direction }}</td> 
-                         <td class="time-display">{{ dep.time }}</td> 
-                     </tr> 
-                     {% endfor %} 
-                 </tbody> 
-                 </table> 
-              
-         {% else %} 
-             <div class="empty-state"> 
+            inp.addEventListener("input", function() {
+                let val = this.value;
+                listContainer.innerHTML = "";
+                listContainer.style.display = "none";
+                toggleClearBtn(this);
 
-                 Brak odjazdów lub nie znaleziono przystanku dla: 
-<strong>{{ stop_number.split(': ')[1] }}</strong> (ID: 
-{{stop_number.split(':')[0]}}).<br> 
-                 Upewnij się, że wpisana nazwa lub ID jest poprawne. 
-             </div> 
-         {% endif %} 
-     {% endif %} 
+                if (!val) return;
 
-     <script> 
-         function toggleClearBtn(inputElement) { 
-             const clearBtn = inputElement.nextElementSibling; 
-             if (inputElement.value.length > 0) { 
-                 clearBtn.style.display = 'block'; 
-             } else { 
-                 clearBtn.style.display = 'none'; 
-             } 
-         } 
+                let count = 0;
+                let szukanaWartosc = usunOgonki(val.toLowerCase());
 
-         function clearInput(inputId) { 
-             const inputElement = document.getElementById(inputId); 
-             inputElement.value = ''; 
-             toggleClearBtn(inputElement); 
-             inputElement.focus(); 
-         } 
+                for (let i = 0; i < arr.length; i++) {
+                    let nazwaPrzystanku = usunOgonki(arr[i].toLowerCase());
 
-         function submitExactStop(exactValue) { 
-             let inputId = 'input-bydgoszcz';
-             if (exactValue.startsWith('T')) {
-                 inputId = 'input-torun';
-             } else if (exactValue.startsWith('P')) {
-                 inputId = 'input-pociagi';
-             }
-             let inputEl = document.getElementById(inputId); 
-              
-             if(inputEl) { 
-                 inputEl.value = exactValue;  
-                 inputEl.closest('form').submit();  
-             } 
-         } 
+                    if (nazwaPrzystanku.includes(szukanaWartosc)) {
+                        let item = document.createElement("div");
+                        item.innerText = arr[i];
+                        
+                        item.addEventListener("click", function() {
+                            inp.value = this.innerText;
+                            listContainer.innerHTML = "";
+                            listContainer.style.display = "none";
+                            toggleClearBtn(inp);
+                        });
+                        
+                        listContainer.appendChild(item);
+                        count++;
+                        if(count > 10) break;
+                    }
+                }
+                
+                if(count > 0) {
+                    listContainer.style.display = "block";
+                }
+            });
 
-         const torunStops = {{ unikalne_nazwy['T'] | tojson | safe }}; 
-         const bydgoszczStops = {{ unikalne_nazwy['B'] | tojson | safe }}; 
-         const pociagiStops = {{ unikalne_nazwy['P'] | default('[]') | tojson | safe }};
+            document.addEventListener("click", function(e) {
+                if (e.target !== inp && e.target !== listContainer) {
+                    listContainer.innerHTML = "";
+                    listContainer.style.display = "none";
+                }
+            });
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const inputs = document.querySelectorAll('input[name="stop_number"]');
+            inputs.forEach(input => toggleClearBtn(input));
 
-         function setupAutocomplete(inputId, arr, listId) { 
-             const inp = document.getElementById(inputId); 
-             const listContainer = document.getElementById(listId); 
+            setupAutocomplete('input-torun', torunStops, 'autocomplete-list-torun');
+            setupAutocomplete('input-bydgoszcz', bydgoszczStops, 'autocomplete-list-bydgoszcz');
+            setupAutocomplete('input-pociagi', pociagiStops, 'autocomplete-list-pociagi');
+        });
 
-             inp.addEventListener("input", function() { 
-                 let val = this.value; 
-                 listContainer.innerHTML = ""; 
-                 listContainer.style.display = "none"; 
-                 toggleClearBtn(this); 
+        const trasyData = {{ trasy | default('{}') | tojson | safe }};
+        
+        let obecnyWidok = 'linie';
+        let wybranaLinia = '';
 
-                 if (!val) return; 
+        function toggleBrowser() {
+            const browser = document.getElementById('routes-browser');
+            browser.style.display = browser.style.display === 'block' ? 'none' : 'block';
+            if (browser.style.display === 'block') { renderLinie(); }
+        }
 
-                 let count = 0; 
-                 for (let i = 0; i < arr.length; i++) { 
-                     if (arr[i].toLowerCase().includes(val.toLowerCase())) { 
-                         let item = document.createElement("div"); 
-                         item.innerText = arr[i]; 
-                          
-                         item.addEventListener("click", function() { 
-                             inp.value = this.innerText; 
-                             listContainer.innerHTML = ""; 
-                             listContainer.style.display = "none"; 
-                             toggleClearBtn(inp); 
-                         }); 
-                          
-                         listContainer.appendChild(item); 
-                         count++; 
-                         if(count > 10) break; 
-                     } 
-                 } 
-                  
-                 if(count > 0) { 
-                     listContainer.style.display = "block"; 
-                 } 
-             }); 
+        function goBack() {
+            if (obecnyWidok === 'przystanki') { renderKierunki(wybranaLinia); }
+            else if (obecnyWidok === 'kierunki') { renderLinie(); }
+        }
 
-             document.addEventListener("click", function(e) { 
-                 if (e.target !== inp && e.target !== listContainer) { 
-                     listContainer.innerHTML = ""; 
-                     listContainer.style.display = "none"; 
-                 } 
-             }); 
-         } 
+        function renderLinie() {
+            obecnyWidok = 'linie';
+            wybranaLinia = '';
+            document.getElementById('browser-title').innerText = 'Linie dzienne i tramwajowe';
+            document.getElementById('browser-back').style.display = 'none';
+            
+            const content = document.getElementById('browser-content');
+            content.innerHTML = '';
+            
+            const linie = Object.keys(trasyData).sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
+            
+            const tramwaje = [];
+            const dzienne = [];
+            const miedzygminne = [];
+            const nocne = [];
+            const inne = [];
 
-         document.addEventListener("DOMContentLoaded", () => { 
-             const inputs = document.querySelectorAll('input[name="stop_number"]'); 
-             inputs.forEach(input => toggleClearBtn(input)); 
+            linie.forEach(linia => {
+                if (linia.toUpperCase().includes('N')) {
+                    nocne.push(linia);
+                } else if (!isNaN(linia)) {
+                    const num = parseInt(linia);
+                    if (num < 20) { 
+                        tramwaje.push(linia);
+                    } 
+                    else if ((num >= 40 && num < 50) || (num >= 90 && num < 100)) {
+                        miedzygminne.push(linia);
+                    } 
+                    else {
+                        dzienne.push(linia);
+                    }
+                } else {
+                    inne.push(linia);
+                }
+            });
 
-             setupAutocomplete('input-torun', torunStops, 'autocomplete-list-torun'); 
-             setupAutocomplete('input-bydgoszcz', bydgoszczStops, 'autocomplete-list-bydgoszcz'); 
-             setupAutocomplete('input-pociagi', pociagiStops, 'autocomplete-list-pociagi');
-         }); 
+            function createSection(title, items) {
+                if (items.length === 0) return;
+                const titleEl = document.createElement('h4');
+                titleEl.innerText = title;
+                titleEl.style.color = 'var(--text-secondary)';
+                titleEl.style.marginTop = '20px';
+                titleEl.style.marginBottom = '10px';
+                titleEl.style.fontWeight = 'normal';
+                content.appendChild(titleEl);
 
-         const trasyData = {{ trasy | default('{}') | tojson | safe }}; 
-          
-         let obecnyWidok = 'linie'; 
-         let wybranaLinia = ''; 
+                const grid = document.createElement('div');
+                grid.className = 'lines-grid';
+                items.forEach(linia => {
+                    const btn = document.createElement('div');
+                    btn.className = 'line-badge';
+                    btn.innerText = linia;
+                    btn.onclick = () => renderKierunki(linia);
+                    grid.appendChild(btn);
+                });
+                content.appendChild(grid);
+            }
 
-         function toggleBrowser() { 
-             const browser = document.getElementById('routes-browser'); 
-             browser.style.display = browser.style.display === 'block' ? 'none' : 'block'; 
-             if (browser.style.display === 'block') { renderLinie(); } 
-         } 
+            createSection('Linie tramwajowe', tramwaje);
+            createSection('Linie dzienne', dzienne);
+            createSection('Linie międzygminne', miedzygminne); 
+            createSection('Linie nocne', nocne);
+            createSection('Pozostałe', inne);
+        }
 
-         function goBack() { 
-             if (obecnyWidok === 'przystanki') { renderKierunki(wybranaLinia); } 
-             else if (obecnyWidok === 'kierunki') { renderLinie(); } 
-         } 
+        function renderKierunki(linia) {
+            obecnyWidok = 'kierunki';
+            wybranaLinia = linia;
+            document.getElementById('browser-title').innerText = 'Linia ' + linia + ' - Wybierz kierunek';
+            document.getElementById('browser-back').style.display = 'block';
+            
+            const content = document.getElementById('browser-content');
+            content.innerHTML = '';
+            
+            const kierunki = Object.keys(trasyData[linia]);
+            kierunki.forEach(kier => {
+                const btn = document.createElement('button');
+                btn.className = 'direction-btn';
+                btn.type = 'button';
+                btn.innerHTML = '<span style="color: #888; font-size: 0.8em; margin-right: 10px;">kier.</span>' + kier;
+                btn.onclick = () => renderPrzystanki(linia, kier);
+                content.appendChild(btn);
+            });
+        }
 
-         function renderLinie() { 
-             obecnyWidok = 'linie'; 
-             wybranaLinia = ''; 
-             document.getElementById('browser-title').innerText = 'Linie dzienne i tramwajowe'; 
-             document.getElementById('browser-back').style.display = 'none'; 
-              
-             const content = document.getElementById('browser-content'); 
-             content.innerHTML = ''; 
-              
-             const linie = Object.keys(trasyData).sort((a, b) => a.localeCompare(b, undefined, {numeric: true})); 
-              
-             const tramwaje = []; 
-             const dzienne = []; 
-             const miedzygminne = []; 
-             const nocne = []; 
-             const inne = []; 
-
-             linie.forEach(linia => { 
-                 if (linia.toUpperCase().includes('N')) { 
-                     nocne.push(linia); 
-                 } else if (!isNaN(linia)) { 
-                     const num = parseInt(linia); 
-                     if (num < 40) {  
-                         tramwaje.push(linia); 
-                     }  
-                     else if ((num >= 40 && num < 50) || (num >= 90 && num < 100)) { 
-                         miedzygminne.push(linia); 
-                     }  
-                     else { 
-                         dzienne.push(linia); 
-                     } 
-                 } else { 
-                     inne.push(linia); 
-                 } 
-             }); 
-
-             function createSection(title, items) { 
-                 if (items.length === 0) return; 
-                 const titleEl = document.createElement('h4'); 
-                 titleEl.innerText = title; 
-                 titleEl.style.color = 'var(--text-secondary)'; 
-                 titleEl.style.marginTop = '20px'; 
-                 titleEl.style.marginBottom = '10px'; 
-                 titleEl.style.fontWeight = 'normal'; 
-                 content.appendChild(titleEl); 
-
-                 const grid = document.createElement('div'); 
-                 grid.className = 'lines-grid'; 
-                 items.forEach(linia => { 
-                     const btn = document.createElement('div'); 
-                     btn.className = 'line-badge'; 
-                     btn.innerText = linia; 
-                     btn.onclick = () => renderKierunki(linia); 
-                     grid.appendChild(btn); 
-                 }); 
-                 content.appendChild(grid); 
-             } 
-
-             createSection('Linie tramwajowe', tramwaje); 
-             createSection('Linie dzienne', dzienne); 
-             createSection('Linie międzygminne', miedzygminne);  
-             createSection('Linie nocne', nocne); 
-             createSection('Pozostałe', inne); 
-         } 
-
-         function renderKierunki(linia) { 
-             obecnyWidok = 'kierunki'; 
-             wybranaLinia = linia; 
-             document.getElementById('browser-title').innerText = 'Linia ' + linia + ' - Wybierz kierunek'; 
-             document.getElementById('browser-back').style.display = 'block'; 
-              
-             const content = document.getElementById('browser-content'); 
-             content.innerHTML = ''; 
-              
-             const kierunki = Object.keys(trasyData[linia]); 
-             kierunki.forEach(kier => { 
-                 const btn = document.createElement('button'); 
-                 btn.className = 'direction-btn'; 
-                 btn.type = 'button'; 
-
-                 btn.innerHTML = '<span style="color: #888; font-size: 0.8em; margin-right: 10px;">kier.</span>' + kier; 
-                 btn.onclick = () => renderPrzystanki(linia, kier); 
-                 content.appendChild(btn); 
-             }); 
-         } 
-
-         function renderPrzystanki(linia, kierunek) { 
-             obecnyWidok = 'przystanki'; 
-             document.getElementById('browser-title').innerText = 'Kierunek: ' + kierunek; 
-              
-             const content = document.getElementById('browser-content'); 
-             content.innerHTML = '<div class="route-timeline"></div>'; 
-             const timeline = content.querySelector('.route-timeline'); 
-              
-             const przystanki = trasyData[linia][kierunek]; 
-             przystanki.forEach(przystanek => { 
-                 const div = document.createElement('div'); 
-                 div.className = 'route-stop'; 
-                 div.innerText = przystanek.nazwa; 
-                  
-                 div.onclick = () => { 
-                     const inputFormularza = document.getElementById('input-bydgoszcz'); 
-                     inputFormularza.value = przystanek.kod + ': ' + przystanek.nazwa; 
-                     inputFormularza.closest('form').submit(); 
-                 }; 
-                  
-                 timeline.appendChild(div); 
-             }); 
-         } 
-     </script> 
- </body> 
- </html>
+        function renderPrzystanki(linia, kierunek) {
+            obecnyWidok = 'przystanki';
+            document.getElementById('browser-title').innerText = 'Kierunek: ' + kierunek;
+            
+            const content = document.getElementById('browser-content');
+            content.innerHTML = '<div class="route-timeline"></div>';
+            const timeline = content.querySelector('.route-timeline');
+            
+            const przystanki = trasyData[linia][kierunek];
+            przystanki.forEach(przystanek => {
+                const div = document.createElement('div');
+                div.className = 'route-stop';
+                div.innerText = przystanek.nazwa;
+                
+                div.onclick = () => {
+                    const inputFormularza = document.getElementById('input-bydgoszcz');
+                    inputFormularza.value = przystanek.kod + ': ' + przystanek.nazwa;
+                    inputFormularza.closest('form').submit();
+                };
+                
+                timeline.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
