@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BiTCityLive - Komunikacja miejska na żywo</title>
+    
+    <style>
+        :root {
+            --bg-color: #f9f9f9;
+            --surface-color: #ffffff;
+            --primary-color: #2e7d32;
+            --text-main: #1a1a1a;
+            --text-secondary: #555555;
+            --border-color: #dddddd;
+            --hover-bg: #f1f1f1;
+            --alert-color: #ffb300bb;
+            --alert-border-color: #ffb300;
+            --calendar-invert: 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --surface-color: #1e1e1e;
+                --primary-color: #4CAF50;
+                --text-main: #ffffff;
+                --text-secondary: #a0a0a0;
+                --border-color: #333333;
+                --hover-bg: #2a2d2e;
+                --alert-color: #f3a300dd;
+                --alert-border-color: #f3a300;
+                --calendar-invert: 1;
+            }
+        }
+
+        html {
+            background-color: var(--bg-color);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .brand-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        .brand-link:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .top-nav {
+            width: 100%;
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-icons { display: flex; gap: 15px; }
+        .nav-icons a { color: var(--text-secondary); transition: color 0.2s; }
+        .nav-icons a:hover { color: var(--primary-color); }
+        .nav-title { font-size: 1.5em; letter-spacing: 1px; }
+        .hamburger-btn { background: none; border: none; color: var(--text-main); cursor: pointer; padding: 5px; }
+        
+        .side-menu {
+            position: fixed; 
+            top: 0; 
+            right: 0; 
+            bottom: 0;
+            width: 250px;
+            background-color: var(--surface-color); 
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            transform: translateX(100%);
+            z-index: 1000; 
+            padding: 60px 20px 20px;
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            box-sizing: border-box;
+        }
+        
+        .side-menu.open { 
+            transform: translateX(0);
+        }
+        .close-menu-btn { position: absolute; top: 15px; right: 20px; font-size: 35px; background: none; border: none; color: var(--text-main); cursor: pointer; }
+        .menu-link { text-decoration: none; color: var(--text-main); font-size: 1.2em; padding: 10px; border-radius: 8px; border: 1px solid transparent; transition: all 0.2s; }
+        .menu-link:hover { background-color: var(--hover-bg); border-color: var(--border-color); color: var(--primary-color); }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 2000; display: none;
+            overflow-y: auto; 
+            -webkit-overflow-scrolling: touch; 
+            padding: 20px; box-sizing: border-box;
+        }
+
+        .modal-content {
+            background: var(--surface-color); border-radius: 12px; 
+            width: 100%; max-width: 600px;
+            margin: 40px auto; 
+            padding: 30px; position: relative; box-sizing: border-box;
+        }
+        .modal-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        .modal-buttons button { padding: 12px 20px; border-radius: 8px; background: transparent; border: 2px solid var(--primary-color); color: var(--text-main); font-weight: bold; cursor: pointer; font-size: 1em; transition: 0.2s; }
+        .modal-buttons button:hover { background: var(--primary-color); color: #fff; }
+
+        .main-content {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-container { text-align: center; margin-bottom: 40px; margin-top: 10px; width: 100%; }
+        .header-title { font-size: 3em; margin: 0; letter-spacing: 1px; }
+        .header-subtitle { color: var(--text-secondary); font-size: 1.1em; margin-top: 5px; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-icons">
+            <a href="https://github.com/ttramdriver/BiTCityLive" target="_blank" title="GitHub">
+                <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+            </a>
+            <a href="https://discord.gg/STtYrUptTq" target="_blank" title="Discord">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.1 18.099a.082.082 0 0 0 .031.058c1.375 1.012 2.695 1.625 3.99 2.035a.075.075 0 0 0 .083-.038c.453-.787.865-1.622 1.176-2.484a.077.077 0 0 0-.041-.102c-.397-.152-.777-.323-1.155-.514a.077.077 0 0 1-.007-.128c.078-.057.156-.115.231-.176a.077.077 0 0 1 .082-.007c2.42 1.104 5.04 1.666 7.636 1.666 2.597 0 5.217-.562 7.637-1.666a.077.077 0 0 1 .082.007c.075.061.154.119.231.176a.077.077 0 0 1-.007.128c-.378.19-.759.362-1.155.514a.077.077 0 0 0-.041.102c.311.862.723 1.697 1.176 2.484a.075.075 0 0 0 .083.038c1.295-.41 2.615-1.023 3.99-2.035a.076.076 0 0 0 .031-.058c.484-5.067-.367-9.601-3.56-14.278a.074.074 0 0 0-.032-.027zm-13.88 10.155c-1.25 0-2.268-1.15-2.268-2.563 0-1.413 1.018-2.563 2.268-2.563 1.25 0 2.269 1.15 2.269 2.563 0 1.413-1.019 2.563-2.269 2.563zm10.96 0c-1.25 0-2.268-1.15-2.268-2.563 0-1.413 1.018-2.563 2.268-2.563 1.25 0 2.269 1.15 2.269 2.563 0 1.413-1.019 2.563-2.269 2.563z"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="nav-title"><a href="/" class="brand-link" style="font-size: 1em;">BiTCityLive</a></div>
+
+        <div class="nav-icons" style="margin-left: -8px;">
+            <a href="javascript:toggleColorScheme();" title="Przełącz na tryb jasny" style="margin-right: -5px;" id="icon-change-theme">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="margin-bottom: -17px; padding-left: 3px;" id="icon-moon" display="none">
+                    <path d="M 0,12.152273 C 0,7.0606786 3.0309083,2.6769857 7.3869247,0.707031 L 8.8736442,2.1937519 C 8.2158373,3.5425285 7.8467273,5.0579387 7.8467273,6.6595531 c 0,5.6337259 4.5670307,10.2007349 10.2007457,10.2007349 1.601674,0 3.117034,-0.369111 4.465729,-1.026825 L 24,17.320107 C 22.030001,21.676148 17.646348,24.707031 12.554764,24.707031 5.620956,24.707031 0,19.086095 0,12.152273 Z"/>
+                    <path d="M 18.047473,10.58294 14.124109,6.6595688 18.047473,2.7361972 21.970836,6.6595688 Z"/>
+                </svg>
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-bottom: -22px; margin-right: -5px;" id="icon-sun">
+                    <path d="M12 3V4M12 20V21M4 12H3M6.31412 6.31412L5.5 5.5M17.6859 6.31412L18.5 5.5M6.31412 17.69L5.5 18.5001M17.6859 17.69L18.5 18.5001M21 12H20M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- This svg has been taken from https://www.svgrepo.com/svg/532889/sun, it's colors and size have been changed -->
+                </svg>
+            </a>
+            <button class="hamburger-btn" onclick="toggleMenu()">
+                <svg viewBox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <div id="side-menu" class="side-menu">
+        <button class="close-menu-btn" onclick="toggleMenu()">&times;</button>
+        <a href=".." class="menu-link" onclick="toggleMenu();">Odjazdy na żywo</a>
+        <a href="#" class="menu-link" onclick="openTimetablesModal(); toggleMenu();">Rozkłady jazdy</a>
+    </div>
+    
+    <div class="main-content">
+        [strona w budowie]
+        
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('side-menu');
+            menu.classList.toggle('open');
+        }
+
+        function getPreferredColorScheme() {
+            let systemScheme = 'light';
+            if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+                systemScheme = 'dark';
+            }
+            let chosenScheme = systemScheme;
+
+            if(localStorage.getItem("scheme")){
+                chosenScheme = localStorage.getItem("scheme");
+            }
+
+            if(systemScheme === chosenScheme){
+                localStorage.removeItem("scheme");
+            }
+
+            return chosenScheme;
+        }
+
+        function savePreferredColorScheme(scheme){
+            let systemScheme = 'light';
+
+            if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+                systemScheme = 'dark';
+            }
+
+            if(systemScheme === scheme){
+                localStorage.removeItem("scheme");
+            }
+            else {
+                localStorage.setItem("scheme", scheme);
+            }
+
+        }
+
+        function toggleColorScheme(){
+            let newScheme = "light";
+            let scheme = getPreferredColorScheme();
+            if (scheme === "light"){
+                newScheme = "dark";
+            }
+
+            applyPreferredColorScheme(newScheme);
+            savePreferredColorScheme(newScheme);
+        }
+
+        function applyPreferredColorScheme(scheme) {
+            for (var s = 0; s < document.styleSheets.length; s++) {
+
+                for (var i = 0; i < document.styleSheets[s].cssRules.length; i++) {
+                    rule = document.styleSheets[s].cssRules[i];
+
+
+                    if (rule && rule.media && rule.media.mediaText.includes("prefers-color-scheme")) {
+
+                        switch (scheme) {
+                            case "light":
+                                rule.media.appendMedium("original-prefers-color-scheme");
+                                if (rule.media.mediaText.includes("light")) rule.media.deleteMedium("(prefers-color-scheme: light)");
+                                if (rule.media.mediaText.includes("dark")) rule.media.deleteMedium("(prefers-color-scheme: dark)");
+                                break;
+                            case "dark":
+                                rule.media.appendMedium("(prefers-color-scheme: light)");
+                                rule.media.appendMedium("(prefers-color-scheme: dark)");
+                                if (rule.media.mediaText.includes("original")) rule.media.deleteMedium("original-prefers-color-scheme");
+                                break;
+                            default:
+                                rule.media.appendMedium("(prefers-color-scheme: dark)");
+                                if (rule.media.mediaText.includes("light")) rule.media.deleteMedium("(prefers-color-scheme: light)");
+                                if (rule.media.mediaText.includes("original")) rule.media.deleteMedium("original-prefers-color-scheme");
+                                break;
+                        }
+                    }
+                }
+            }
+            if (scheme === "dark") {
+                document.getElementById("icon-sun").style.display = 'inline';
+                document.getElementById("icon-moon").style.display = 'none';
+                document.getElementById("icon-change-theme").title = 'Przełącz na tryb jasny';
+            } else {
+                document.getElementById("icon-moon").style.display = 'inline';
+                document.getElementById("icon-sun").style.display = 'none';
+                document.getElementById("icon-change-theme").title = 'Przełącz na tryb ciemny';
+            }
+        }
+
+        applyPreferredColorScheme(getPreferredColorScheme());
+    </script>
+</body>
+</html>
