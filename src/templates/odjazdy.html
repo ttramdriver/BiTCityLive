@@ -50,79 +50,6 @@
             min-height: 100vh;
         }
 
-        .brand-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: bold;
-            transition: opacity 0.2s;
-        }
-        .brand-link:hover {
-            opacity: 0.8;
-            text-decoration: underline;
-        }
-
-        .top-nav {
-            width: 100%;
-            background-color: var(--surface-color);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            box-sizing: border-box;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-icons { display: flex; gap: 15px; }
-        .nav-icons a { color: var(--text-secondary); transition: color 0.2s; }
-        .nav-icons a:hover { color: var(--primary-color); }
-        .nav-title { font-size: 1.5em; letter-spacing: 1px; }
-        .hamburger-btn { background: none; border: none; color: var(--text-main); cursor: pointer; padding: 5px; }
-        
-        .side-menu {
-            position: fixed; 
-            top: 0; 
-            right: 0; 
-            bottom: 0;
-            width: 250px;
-            background-color: var(--surface-color); 
-            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            transform: translateX(100%);
-            z-index: 1000; 
-            padding: 60px 20px 20px;
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-            box-sizing: border-box;
-        }
-        
-        .side-menu.open { 
-            transform: translateX(0);
-        }
-        .close-menu-btn { position: absolute; top: 15px; right: 20px; font-size: 35px; background: none; border: none; color: var(--text-main); cursor: pointer; }
-        .menu-link { text-decoration: none; color: var(--text-main); font-size: 1.2em; padding: 10px; border-radius: 8px; border: 1px solid transparent; transition: all 0.2s; }
-        .menu-link:hover { background-color: var(--hover-bg); border-color: var(--border-color); color: var(--primary-color); }
-
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 2000; display: none;
-            overflow-y: auto; 
-            -webkit-overflow-scrolling: touch; 
-            padding: 20px; box-sizing: border-box;
-        }
-
-        .modal-content {
-            background: var(--surface-color); border-radius: 12px; 
-            width: 100%; max-width: 600px;
-            margin: 40px auto; 
-            padding: 30px; position: relative; box-sizing: border-box;
-        }
-        .modal-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
-        .modal-buttons button { padding: 12px 20px; border-radius: 8px; background: transparent; border: 2px solid var(--primary-color); color: var(--text-main); font-weight: bold; cursor: pointer; font-size: 1em; transition: 0.2s; }
-        .modal-buttons button:hover { background: var(--primary-color); color: #fff; }
-
         .main-content {
             max-width: 1200px;
             width: 100%;
@@ -260,81 +187,6 @@
     </style>
 </head>
 <body>
-    <div id="side-menu" class="side-menu">
-        <button class="close-menu-btn" onclick="toggleMenu()">&times;</button>
-        <a href="/zmianyTras/" class="menu-link" onclick="toggleMenu();">Informacje o zmianach tras</a>
-        <a href="#" class="menu-link" onclick="openPlannerModal(); toggleMenu();">Planer tras</a>
-        <a href="#" class="menu-link" onclick="openTimetablesModal(); toggleMenu();">Rozkłady jazdy</a>
-    </div>
-
-    <div id="timetables-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-menu-btn" style="color: var(--text-main);" onclick="closeTimetablesModal()">&times;</button>
-            <h2 style="margin-top: 0; color: var(--primary-color);">Wybierz miasto</h2>
-            
-            <div class="modal-buttons" id="modal-city-select">
-                <button onclick="renderLinie('B')">MZK Bydgoszcz</button>
-                <button onclick="renderLinie('T')">MZK Toruń</button>
-            </div>
-            
-            <div id="modal-browser-content" style="display: none; margin-top: 20px;">
-                <div class="browser-header">
-                    <h3 id="browser-title" style="margin: 0;">Linie dzienne i tramwajowe</h3>
-                    <button type="button" class="back-btn" id="browser-back" onclick="goBack()">&larr; Wróć</button>
-                </div>
-                <div id="browser-inner-content"></div> 
-            </div>
-        </div>
-    </div>
-
-    <div id="journey-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-menu-btn" style="color: var(--text-main);" onclick="closeJourneyModal()">&times;</button>
-            <h2 style="margin-top: 0; color: var(--primary-color);" id="journey-title">Trasa kursu</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 20px;" id="journey-subtitle"></p>
-            <div id="journey-timeline" class="route-timeline"></div>
-        </div>
-    </div>
-
-    <div id="planner-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-menu-btn" style="color: var(--text-main);" onclick="closePlannerModal()">&times;</button>
-            <h2 style="margin-top: 0; color: var(--primary-color);">Planer tras</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 20px;">Wyszukaj połączenie transportem publicznym. Obsługuje nazwy przystanków oraz adresy.</p>
-            
-            <form id="planner-form" onsubmit="szukajPolaczeniaOTP(event)">
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    
-                    <div class="autocomplete-container">
-                        <input type="text" id="planner-from" placeholder="Skąd (adres lub przystanek)..." required autocomplete="off">
-                        <span class="clear-btn" onclick="clearInput('planner-from')">&times;</span>
-                        <div id="planner-from-list" class="autocomplete-items"></div>
-                    </div>
-                    
-                    <div class="autocomplete-container">
-                        <input type="text" id="planner-to" placeholder="Dokąd (adres lub przystanek)..." required autocomplete="off">
-                        <span class="clear-btn" onclick="clearInput('planner-to')">&times;</span>
-                        <div id="planner-to-list" class="autocomplete-items"></div>
-                    </div>
-
-                    <div class="datetime-inputs">
-                        <select id="planner-arrive-by" title="Sposób planowania">
-                            <option value="false">Odjazd po</option>
-                            <option value="true">Przyjazd na</option>
-                        </select>
-                        <input type="date" id="planner-date" required title="Data odjazdu/przyjazdu">
-                        <input type="time" id="planner-time" required title="Godzina odjazdu/przyjazdu">
-                    </div>
-                    
-                    <button type="submit" class="submit-planner-btn">Szukaj połączenia</button>
-                </div>
-            </form>
-
-            <div id="planner-results" style="margin-top: 20px; display: none;">
-                <div class="empty-state" id="planner-status">Łączenie z serwerem planowania...</div>
-            </div>
-        </div>
-    </div>
 
     <div class="main-content">
         <header class="header-container">
@@ -352,7 +204,7 @@
 
                 Trasy linii 77 i 33N zostały zmienione! przystanki pn Podmiejska/Kruszyńska zostały zawieszone, 
                 w zamian uruchomiono przystanki pn. Kruszyńska/Podmiejska oraz Kruszyńska/Podmiejska. 
-                Wiecej informacji o zmianach tras znajduje się <a href="zmianyTras">tu</a>.
+                Wiecej informacji o zmianach tras znajduje się <a href="/zmianyTras/">tu</a>.
             </article> 
         </header> 
 
