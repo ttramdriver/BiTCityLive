@@ -567,9 +567,100 @@ def index():
                            czasy_t=CZASY_ODCINKOW_TORUN,
                            pokaż_przycisk_tras=POKAZ_PRZYCISK_TRAS)
 
+@app.route('/odjazdy/', methods=['GET', 'POST'])
+def odjazdy():
+    departures = []
+    stop_number = None
+    matching_stops = []
+    
+    if request.method == 'POST':
+        raw_input = request.form.get('stop_number', '').strip()
+        stop_number = raw_input
+        
+        if ':' in raw_input:
+            stop_id_raw = raw_input.split(':')[0].strip()
+            kody_do_sprawdzenia = stop_id_raw.split('+')
+            deps_list = []
+            
+            for stop_id in kody_do_sprawdzenia:
+                deps = pobierz_odjazdy(stop_id)
+                if isinstance(deps, list):
+                    deps_list.extend(deps)
+                    
+            if deps_list:
+                departures = filter_and_sort_departures(deps_list)
+            
+        else:
+            search_query = raw_input.lower()
+            scalone_grupy = {}
+            
+            for kod, nazwa in PRZYSTANKI.items():
+                nazwa_baza_lower = nazwa.split('(')[0].strip().lower()
+                
+                if search_query in nazwa_baza_lower:
+                    linie_kierunki = uzyskaj_linie_przystanku(kod)
+                    
+                    klucz_parowania = None
+                    if kod in WSPOLNE_PRZYSTANKI:
+                        klucz_parowania = WSPOLNE_PRZYSTANKI[kod]
+                    elif kod in WSPOLNE_PRZYSTANKI.values():
+                        klucz_parowania = kod
+                        
+                    if klucz_parowania:
+                        if klucz_parowania in scalone_grupy:
+                            istniejacy_kafelek = scalone_grupy[klucz_parowania]
+                            zestaw_linii = list(set(istniejacy_kafelek['linie_kierunki'] + linie_kierunki))
+                            zestaw_linii.sort(key=lambda x: int(''.join(filter(str.isdigit, x.split('->')[0]))) if any(c.isdigit() for c in x.split('->')[0]) else 999)
+                            istniejacy_kafelek['linie_kierunki'] = zestaw_linii
+                            if kod not in istniejacy_kafelek['kod']:
+                                istniejacy_kafelek['kod'] = f"{istniejacy_kafelek['kod']}+{kod}"
+                        else:
+                            nowy_kafelek = {
+                                'kod': kod,
+                                'nazwa': nazwa.split('(')[0].strip(),
+                                'linie_kierunki': list(linie_kierunki)
+                            }
+                            matching_stops.append(nowy_kafelek)
+                            scalone_grupy[klucz_parowania] = nowy_kafelek
+                    else:
+                        matching_stops.append({
+                            'kod': kod,
+                            'nazwa': nazwa,  
+                            'linie_kierunki': linie_kierunki
+                        })
+            
+            if matching_stops:
+                dokladna_stacja = None
+                
+                dokladne_dopasowania = [s for s in matching_stops if s['nazwa'].split('(')[0].strip().lower() == search_query]
+                
+                if len(dokladne_dopasowania) == 1:
+                    dokladna_stacja = dokladne_dopasowania[0]
+                elif len(matching_stops) == 1:
+                    dokladna_stacja = matching_stops[0]
+                    
+                if dokladna_stacja:
+                    departures = pobierz_odjazdy(dokladna_stacja['kod'])
+                    stop_number = f"{dokladna_stacja['kod']}: {dokladna_stacja['nazwa']}"
+                    matching_stops = []
+                
+    return render_template('odjazdy.html', 
+                           departures=departures, 
+                           stop_number=stop_number, 
+                           przystanki=PRZYSTANKI, 
+                           trasy=TRASY,
+                           trasy_b=TRASY_BYDGOSZCZ,
+                           trasy_t=TRASY_TORUN,
+                           matching_stops=matching_stops,
+                           unikalne_nazwy=UNIKALNE_NAZWY,
+                           przystanki_planer=PRZYSTANKI_PLANER,
+                           czasy_b=CZASY_ODCINKOW_BYDGOSZCZ,
+                           czasy_t=CZASY_ODCINKOW_TORUN,
+                           pokaż_przycisk_tras=POKAZ_PRZYCISK_TRAS)
+
 
 @app.route('/zmianyTras/')
-def about():
+def zmianyTras():
     return render_template('zmianyTras.html')
 
 if __name__ == '__main__':

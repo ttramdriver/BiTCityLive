@@ -124,7 +124,9 @@
         .modal-buttons button:hover { background: var(--primary-color); color: #fff; }
 
         .main-content {
+            max-width: 1200px;
             width: 100%;
+            padding: 20px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -258,43 +260,9 @@
     </style>
 </head>
 <body>
-    <nav class="top-nav">
-        <div class="nav-icons">
-            <a href="https://github.com/ttramdriver/BiTCityLive" target="_blank" title="GitHub">
-                <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none">
-                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                </svg>
-            </a>
-            <a href="https://discord.gg/STtYrUptTq" target="_blank" title="Discord">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.1 18.099a.082.082 0 0 0 .031.058c1.375 1.012 2.695 1.625 3.99 2.035a.075.075 0 0 0 .083-.038c.453-.787.865-1.622 1.176-2.484a.077.077 0 0 0-.041-.102c-.397-.152-.777-.323-1.155-.514a.077.077 0 0 1-.007-.128c.078-.057.156-.115.231-.176a.077.077 0 0 1 .082-.007c2.42 1.104 5.04 1.666 7.636 1.666 2.597 0 5.217-.562 7.637-1.666a.077.077 0 0 1 .082.007c.075.061.154.119.231.176a.077.077 0 0 1-.007.128c-.378.19-.759.362-1.155.514a.077.077 0 0 0-.041.102c.311.862.723 1.697 1.176 2.484a.075.075 0 0 0 .083.038c1.295-.41 2.615-1.023 3.99-2.035a.076.076 0 0 0 .031-.058c.484-5.067-.367-9.601-3.56-14.278a.074.074 0 0 0-.032-.027zm-13.88 10.155c-1.25 0-2.268-1.15-2.268-2.563 0-1.413 1.018-2.563 2.268-2.563 1.25 0 2.269 1.15 2.269 2.563 0 1.413-1.019 2.563-2.269 2.563zm10.96 0c-1.25 0-2.268-1.15-2.268-2.563 0-1.413 1.018-2.563 2.268-2.563 1.25 0 2.269 1.15 2.269 2.563 0 1.413-1.019 2.563-2.269 2.563z"/>
-                </svg>
-            </a>
-        </div>
-
-        <div class="nav-title"><a href="/" class="brand-link" style="font-size: 1em;">BiTCityLive</a></div>
-
-        <div class="nav-icons" style="margin-left: -8px;">
-            <a href="javascript:toggleColorScheme();" title="Przełącz na tryb jasny" style="margin-right: -5px;" id="icon-change-theme">
-                <svg width="22" height="22" viewBox="0 1 24 24" fill="currentColor" style="margin-bottom: -17px; padding-left: 3px;" id="icon-moon" display="none">
-                    <path d="M 0,12.152273 C 0,7.0606786 3.0309083,2.6769857 7.3869247,0.707031 L 8.8736442,2.1937519 C 8.2158373,3.5425285 7.8467273,5.0579387 7.8467273,6.6595531 c 0,5.6337259 4.5670307,10.2007349 10.2007457,10.2007349 1.601674,0 3.117034,-0.369111 4.465729,-1.026825 L 24,17.320107 C 22.030001,21.676148 17.646348,24.707031 12.554764,24.707031 5.620956,24.707031 0,19.086095 0,12.152273 Z"/>
-                    <path d="M 18.047473,10.58294 14.124109,6.6595688 18.047473,2.7361972 21.970836,6.6595688 Z"/>
-                </svg>
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-bottom: -21px; margin-right: -5px;" id="icon-sun">
-                    <path d="M12 3V4M12 20V21M4 12H3M6.31412 6.31412L5.5 5.5M17.6859 6.31412L18.5 5.5M6.31412 17.69L5.5 18.5001M17.6859 17.69L18.5 18.5001M21 12H20M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <!-- This svg has been taken from https://www.svgrepo.com/svg/532889/sun, it's colors and size have been changed -->
-                </svg>
-            </a>
-            <button class="hamburger-btn" onclick="toggleMenu()">
-                <svg viewBox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            </button>
-        </div>
-    </nav>
-
     <div id="side-menu" class="side-menu">
         <button class="close-menu-btn" onclick="toggleMenu()">&times;</button>
-        <a href="/zmianyTras/" target="MCIframe" class="menu-link" onclick="toggleMenu();">Informacje o zmianach tras</a>
-        <a href="/odjazdy/" target="MCIframe" class="menu-link" onclick="toggleMenu();">Odjazdy na żywo</a>
+        <a href="/zmianyTras/" class="menu-link" onclick="toggleMenu();">Informacje o zmianach tras</a>
         <a href="#" class="menu-link" onclick="openPlannerModal(); toggleMenu();">Planer tras</a>
         <a href="#" class="menu-link" onclick="openTimetablesModal(); toggleMenu();">Rozkłady jazdy</a>
     </div>
@@ -369,19 +337,150 @@
     </div>
 
     <div class="main-content">
-        
+        <header class="header-container">
+            <span class="header-subtitle">Komunikacja miejska i podmiejska na żywo</span>
+            <article class="infobox-technical-issues"> 
+                 <span class="infobox-technical-issues-title"> 
+                    <span style="margin-left: -1px">
+                        <svg viewBox="0 0 25 25" style="fill:var(--text-main); margin-top: -2px; height: 25px; width: 25px;" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="nonzero"
+                            d="m 12.5,0 c 3.45166,0 6.57666,1.39941 8.838867,3.66113 C 23.600586,5.92285 25,9.04834 25,12.5 25,15.95166 23.600586,19.07715 21.338867,21.33887 19.07666,23.60059 15.95166,25 12.5,25 9.0483398,25 5.9233398,23.60059 3.6611328,21.33887 1.3994141,19.07666 0,15.95166 0,12.5 0,9.04834 1.3994141,5.92334 3.6611328,3.66113 5.9233398,1.39941 9.0483398,0 12.5,0 Z m -0.486328,7.86279 c 0,-0.20898 0.03711,-0.40332 0.11084,-0.58154 0.07324,-0.17725 0.184082,-0.33887 0.331543,-0.48389 0.146484,-0.14404 0.307129,-0.2539 0.480468,-0.32715 0.174317,-0.0732 0.361817,-0.11132 0.5625,-0.11132 0.201172,0 0.388672,0.0381 0.561036,0.11084 0.172851,0.0737 0.331054,0.18359 0.476074,0.32861 0.144043,0.14502 0.251953,0.30566 0.324219,0.48389 0.07275,0.17724 0.108398,0.37158 0.108398,0.58056 0,0.20362 -0.03565,0.39453 -0.10791,0.5708 -0.07227,0.17579 -0.179688,0.33887 -0.324707,0.48682 -0.143555,0.14795 -0.301758,0.25977 -0.47461,0.33398 -0.172851,0.0737 -0.360351,0.11182 -0.5625,0.11182 -0.206054,0 -0.39746,-0.0371 -0.57373,-0.11035 C 12.750488,9.18216 12.590332,9.0708 12.445313,8.92432 12.301758,8.77686 12.193359,8.61475 12.121582,8.4375 12.049312,8.26074 12.013672,8.06934 12.013672,7.86279 Z m 0.654297,8.69922 c -0.0542,0.19385 -0.163574,0.57422 0.161133,0.57422 0.07031,0 0.159668,-0.0396 0.266601,-0.11719 0.115723,-0.0835 0.248535,-0.21045 0.396973,-0.37841 0.150879,-0.1709 0.308594,-0.37354 0.472168,-0.60645 0.162597,-0.23242 0.333984,-0.49902 0.512207,-0.79639 0.01807,-0.0317 0.06006,-0.0425 0.09229,-0.0234 l 0.603516,0.44824 c 0.0293,0.021 0.03564,0.061 0.01709,0.0908 -0.277832,0.48242 -0.558593,0.90381 -0.842773,1.26367 -0.285645,0.36182 -0.575684,0.6626 -0.869141,0.8999 l -0.0049,0.003 c -0.293946,0.23828 -0.595215,0.41748 -0.903809,0.5376 -0.858398,0.33252 -2.214844,0.27832 -2.6035157,-0.72412 -0.2451052,-0.63281 -0.043933,-1.35205 0.1494257,-1.97119 l 0.97461,-2.95117 c 0.0625,-0.22364 0.141113,-0.46973 0.169433,-0.69971 0.04736,-0.38428 -0.121582,-0.63281 -0.540039,-0.63281 H 9.8671875 c -0.037109,0 -0.067383,-0.0303 -0.067383,-0.0674 l 0.00391,-0.0234 0.2236335,-0.81446 c 0.0078,-0.0303 0.03564,-0.0508 0.06592,-0.0498 l 4.351562,-0.13623 c 0.03711,-10e-4 0.06885,0.0278 0.07031,0.0649 l -0.0034,0.021 z M 20.397461,4.60254 C 18.376465,2.58154 15.583984,1.33105 12.5,1.33105 9.4160156,1.33105 6.6235352,2.58154 4.6025391,4.60254 2.581543,6.62354 1.3310547,9.41602 1.3310547,12.5 c 0,3.08398 1.2504883,5.87646 3.2714844,7.89746 2.0209961,2.021 4.8134765,3.27149 7.8974609,3.27149 3.083984,0 5.876465,-1.25049 7.897461,-3.27149 2.020996,-2.021 3.271484,-4.81348 3.271484,-7.89746 0,-3.08398 -1.250488,-5.87646 -3.271484,-7.89746 z">
+                        </svg>
+                    </span>
+                    <span style="margin-left: 5px">Występują zmiany tras na niektórych liniach!</span>
+                </span> 
+
+                Trasy linii 77 i 33N zostały zmienione! przystanki pn Podmiejska/Kruszyńska zostały zawieszone, 
+                w zamian uruchomiono przystanki pn. Kruszyńska/Podmiejska oraz Kruszyńska/Podmiejska. 
+                Wiecej informacji o zmianach tras znajduje się <a href="zmianyTras">tu</a>.
+            </article> 
+        </header> 
+
+        <section class="cities-container">
+            <article class="city-card">
+                <h2 class="city-title">Bydgoszcz</h2>
+                <form method="POST">
+                    <div class="input-wrapper">
+                        <div class="autocomplete-container">
+                            <input type="text" id="input-bydgoszcz" name="stop_number" 
+                                   placeholder="ID lub nazwa przystanku..." 
+                                   value="{% if stop_number and stop_number.startswith('B') %}{{ stop_number }}{% endif %}" 
+                                   autocomplete="off" required>
+                            <span class="clear-btn" id="clear-bydgoszcz" onclick="clearInput('input-bydgoszcz')">&times;</span>
+                            <div id="autocomplete-list-bydgoszcz" class="autocomplete-items"></div>
+                        </div>
+                        <input type="submit" value="Szukaj" class="btn-primary">
+                    </div>
+                </form>
+            </article>
+
+            <article class="city-card">
+                <h2 class="city-title">Toruń</h2>
+                <form method="POST">
+                    <div class="input-wrapper">
+                        <div class="autocomplete-container">
+                            <input type="text" id="input-torun" name="stop_number"
+                                   placeholder="ID lub nazwa przystanku..."
+                                   value="{% if stop_number and stop_number.startswith('T') %}{{ stop_number }}{% endif %}"
+                                   autocomplete="off" required>
+                            <span class="clear-btn" id="clear-torun" onclick="clearInput('input-torun')">&times;</span>
+                            <div id="autocomplete-list-torun" class="autocomplete-items"></div>
+                        </div>
+                        <input type="submit" value="Szukaj" class="btn-primary">
+                    </div>
+                </form>
+            </article>
+
+            <article class="city-card"> 
+                <h2 class="city-title">Pociągi</h2>
+                <form method="POST">
+                    <div class="input-wrapper">
+                        <div class="autocomplete-container">
+                            <input type="text" id="input-pociagi" name="stop_number"
+                                   placeholder="ID lub nazwa przystanku..."
+                                   value="{% if stop_number and stop_number.startswith('P') %}{{ stop_number }}{% endif %}"
+                                   autocomplete="off" required>
+                            <span class="clear-btn" id="clear-pociagi" onclick="clearInput('input-pociagi')">&times;</span>
+                            <div id="autocomplete-list-pociagi" class="autocomplete-items"></div>
+                        </div>
+                        <input type="submit" value="Szukaj" class="btn-primary">
+                    </div>
+                </form>
+            </article>
+        </section>
+
+        {% if not stop_number %}
+        <div class="instructions">
+            <h3>Jak korzystać z systemu?</h3>
+            <p>Zacznij wpisywać nazwę przystanku w odpowiednim mieście, aby zobaczyć podpowiedzi.</p>
+            <p>Możesz również wpisać bezpośrednio numer słupka.</p>
+        </div>
+        {% endif %}
+
+        {% if stop_number %}
+            {% if matching_stops %}
+                <div class="matching-stops-container">
+                    <h3 style="color: var(--text-secondary); font-weight: normal; margin-bottom: 20px;">Wybierz konkretny słupek z węzła:</h3>
+                    
+                    {% for stop in matching_stops %}
+                    <div class="stop-group-card" onclick="submitExactStop('{{ stop.kod }}: {{ stop.nazwa }}')">
+                        <div class="stop-group-title">{{ stop.nazwa }}</div>
+                        <div class="stop-group-lines">
+                            {% if stop.linie_kierunki %}
+                                {% for l in stop.linie_kierunki %}
+                                    <span class="inline-route">{{ l }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="inline-route" style="font-style: italic;">Brak zdefiniowanych linii</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            {% elif departures %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{% if stop_number and stop_number.startswith('P') %}Numer pociągu{% else %}Linia{% endif %}</th>
+                            {% if stop_number and stop_number.startswith('P') %}
+                            <th>Peron, Tor</th>
+                            {% endif %}
+                            <th>Kierunek</th>
+                            <th>Odjazd</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dep in departures %}
+                        <tr style="cursor: pointer;" data-line="{{ dep.line }}" data-direction="{{ dep.direction }}" onclick="showJourneyDetails(this.getAttribute('data-line'), this.getAttribute('data-direction'), '{{ dep.time }}')">
+                            <td data-label="{% if stop_number and stop_number.startswith('P') %}Numer pociągu{% else %}Linia{% endif %}">
+                                <span class="line-number">{{ dep.line }}</span>
+                            </td>
+                            
+                            {% if stop_number and stop_number.startswith('P') %}
+                            <td data-label="Peron, Tor">
+                                {% if dep.platform %}Peron {{ dep.platform }}{% endif %}{% if dep.track %}, Tor {{ dep.track }}{% endif %}
+                                {% if not dep.platform and not dep.track %}-{% endif %}
+                            </td>
+                            {% endif %}
+                            
+                            <td data-label="Kierunek">{{ dep.direction }}</td>
+                            <td data-label="Odjazd" class="time-display">{{ dep.time }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            {% else %}
+                <div class="empty-state">
+                    Brak odjazdów lub nie znaleziono przystanku dla: <strong>{{ stop_number.split(': ')[1] }}</strong> (ID: {{stop_number.split(':')[0]}}).<br>
+                    Upewnij się, że wpisana nazwa lub ID jest poprawne.
+                </div>
+            {% endif %}
+        {% endif %}
     </div>
 
-
     <script>
-        function generateMainContent(){
-            let mContentDiv = document.querySelector('.main-content');
-            let nav = document.querySelector('.top-nav');
-            let navHeight = parseInt(getComputedStyle(nav).getPropertyValue('height')) + parseInt(getComputedStyle(nav).getPropertyValue('padding-top')) + parseInt(getComputedStyle(nav).getPropertyValue('padding-bottom'));
-            mContentDiv.innerHTML = "<iframe src=\"/odjazdy/\" style=\"width: 100%; height: 100%; border: none;\" name=\"MCIframe\"></iframe>"
-            mContentDiv.style.height = `calc(100vh - ${navHeight}px)`
-        }
-
         function toggleMenu() {
             const menu = document.getElementById('side-menu');
             menu.classList.toggle('open');
@@ -430,8 +529,6 @@
 
             applyPreferredColorScheme(newScheme);
             savePreferredColorScheme(newScheme);
-
-            document.querySelector('iframe').contentWindow.applyPreferredColorScheme(newScheme);
         }
 
         function applyPreferredColorScheme(scheme) {
@@ -475,10 +572,9 @@
         }
 
         applyPreferredColorScheme(getPreferredColorScheme());
-        generateMainContent();
 
-        /* --- LOGIKA MODALI --- */
-                function openTimetablesModal() {
+        /* --- LOGIKA DLA MODALI --- */
+        function openTimetablesModal() {
             document.getElementById('timetables-modal').style.display = 'block';
             document.getElementById('modal-city-select').style.display = 'flex';
             document.getElementById('modal-browser-content').style.display = 'none';
