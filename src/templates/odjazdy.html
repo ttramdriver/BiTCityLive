@@ -412,15 +412,6 @@
                     }
                 }
             }
-            if (scheme === "dark") {
-                document.getElementById("icon-sun").style.display = 'inline';
-                document.getElementById("icon-moon").style.display = 'none';
-                document.getElementById("icon-change-theme").title = 'Przełącz na tryb jasny';
-            } else {
-                document.getElementById("icon-moon").style.display = 'inline';
-                document.getElementById("icon-sun").style.display = 'none';
-                document.getElementById("icon-change-theme").title = 'Przełącz na tryb ciemny';
-            }
         }
 
         applyPreferredColorScheme(getPreferredColorScheme());

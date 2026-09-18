@@ -293,10 +293,10 @@
 
     <div id="side-menu" class="side-menu">
         <button class="close-menu-btn" onclick="toggleMenu()">&times;</button>
-        <a href="/zmianyTras/" target="MCIframe" class="menu-link" onclick="toggleMenu();">Informacje o zmianach tras</a>
-        <a href="/odjazdy/" target="MCIframe" class="menu-link" onclick="toggleMenu();">Odjazdy na żywo</a>
-        <a href="#" class="menu-link" onclick="openPlannerModal(); toggleMenu();">Planer tras</a>
-        <a href="#" class="menu-link" onclick="openTimetablesModal(); toggleMenu();">Rozkłady jazdy</a>
+        <a href="#/zmianyTras/" target="_self" class="menu-link" onclick="toggleMenu();">Informacje o zmianach tras</a>
+        <a href="#/odjazdy/" target="_self" class="menu-link" onclick="toggleMenu();">Odjazdy na żywo</a>
+        <a href="" class="menu-link" onclick="openPlannerModal(); toggleMenu();">Planer tras</a>
+        <a href="" class="menu-link" onclick="openTimetablesModal(); toggleMenu();">Rozkłady jazdy</a>
     </div>
 
     <div id="timetables-modal" class="modal-overlay">
@@ -373,14 +373,33 @@
     </div>
 
 
-    <script>
+    <script>        
         function generateMainContent(){
             let mContentDiv = document.querySelector('.main-content');
             let nav = document.querySelector('.top-nav');
             let navHeight = parseInt(getComputedStyle(nav).getPropertyValue('height')) + parseInt(getComputedStyle(nav).getPropertyValue('padding-top')) + parseInt(getComputedStyle(nav).getPropertyValue('padding-bottom'));
-            mContentDiv.innerHTML = "<iframe src=\"/odjazdy/\" style=\"width: 100%; height: 100%; border: none;\" name=\"MCIframe\"></iframe>"
+            mContentDiv.innerHTML = "<iframe src=\"/odjazdy/\" style=\"width: 100%; height: 100%; border: none;\"></iframe>"
             mContentDiv.style.height = `calc(100vh - ${navHeight}px)`
         }
+        generateMainContent();
+
+        function changeSubSite(){
+            const availableSubSites = ['/zmianyTras/', '/odjazdy/'];
+            hashSite = (window.location.hash).replace('#', '');
+            newSubSite = "/odjazdy/";
+            for(i=0; i < availableSubSites.length; i++)
+            {
+                if(newSubSite == availableSubSites[i])
+                {
+                    newSubSite = hashSite;
+                }
+            }
+            document.querySelector('iframe').src = newSubSite;
+        }
+        changeSubSite();
+        window.addEventListener("hashchange", () => {
+            changeSubSite();
+        })
 
         function toggleMenu() {
             const menu = document.getElementById('side-menu');
@@ -475,7 +494,6 @@
         }
 
         applyPreferredColorScheme(getPreferredColorScheme());
-        generateMainContent();
 
         /* --- LOGIKA MODALI --- */
                 function openTimetablesModal() {
