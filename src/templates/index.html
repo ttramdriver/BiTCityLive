@@ -104,6 +104,7 @@
         .close-menu-btn { position: absolute; top: 15px; right: 20px; font-size: 35px; background: none; border: none; color: var(--text-main); cursor: pointer; }
         .menu-link { text-decoration: none; color: var(--text-main); font-size: 1.2em; padding: 10px; border-radius: 8px; border: 1px solid transparent; transition: all 0.2s; }
         .menu-link:hover { background-color: var(--hover-bg); border-color: var(--border-color); color: var(--primary-color); }
+        .last-update { position: absolute; bottom: 15px; color: var(--text-secondary); font-size: smaller;}
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -291,13 +292,17 @@
         </div>
     </nav>
 
-    <div id="side-menu" class="side-menu">
+    <aside id="side-menu" class="side-menu">
         <button class="close-menu-btn" onclick="toggleMenu()">&times;</button>
         <a href="#/zmianyTras/" target="_self" class="menu-link" onclick="toggleMenu();">Informacje o zmianach tras</a>
         <a href="#/odjazdy/" target="_self" class="menu-link" onclick="toggleMenu();">Odjazdy na żywo</a>
-        <a href="" class="menu-link" onclick="openPlannerModal(); toggleMenu();">Planer tras</a>
-        <a href="" class="menu-link" onclick="openTimetablesModal(); toggleMenu();">Rozkłady jazdy</a>
-    </div>
+        <a href="#/plannerModal/" class="menu-link" onclick="openPlannerModal(); toggleMenu();">Planer tras</a>
+        <a href="#/timetableModal/" class="menu-link" onclick="openTimetablesModal(); toggleMenu();">Rozkłady jazdy</a>
+        <span class="last-update">
+            ostatnia aktualizacja strony:<br><span class="last-web-update">[brak danych]</span><br>
+            ostatnia aktualizacja projektu GitHub:<br><span class="last-git-update">[brak danych]</span> 
+        </span>
+    </aside>
 
     <div id="timetables-modal" class="modal-overlay">
         <div class="modal-content">
@@ -374,6 +379,15 @@
 
 
     <script>        
+        //p Comments meaning:
+        //p "//" - explanaition for this specific line of code, possibly the one above or bellow (context based)
+        //p "//< [text]" - marks the beginning of a selection of strictly conected code and explains it 
+        //p "//>" - marks the end of the selection that is the nearest from the top
+        //p "/* --- [text] --- */" - marks the beginning of a section of connected selections of code
+        //p "/* --- --- */" - marks the end of the section that is the nearest from the top
+        //p "//p [text]" or "/*p [text] p*/" - personal comment made by someone editing or looking through the code, doesn't necessarily explain any part of the code
+
+        //< Generates the iframe element with correct size
         function generateMainContent(){
             let mContentDiv = document.querySelector('.main-content');
             let nav = document.querySelector('.top-nav');
@@ -381,31 +395,50 @@
             mContentDiv.innerHTML = "<iframe src=\"/odjazdy/\" style=\"width: 100%; height: 100%; border: none;\"></iframe>"
             mContentDiv.style.height = `calc(100vh - ${navHeight}px)`
         }
-        generateMainContent();
+        generateMainContent(); //>
 
+        //< Checks the last time the github project was updated and displays it in the side menu
+        async function fetchLastGitHubUpdate(){
+            response = await fetch("https://api.github.com/repos/ttramdriver/BiTCityLive/commits")
+            if (!response.ok)
+            {
+                throw new Error("Błąd przy sprawdzaniu czasu ostatniej aktualizacji projektu na GitHubie!");
+            }
+            const data = await response.json();
+            let commitData = data[0].commit.committer.date;
+            document.querySelector('.last-git-update').innerText = commitData.replace('T', ' ').slice(0, -4); 
+        }
+        fetchLastGitHubUpdate(); //>
+
+        //< Changes the site in the iframe element based on the #
         function changeSubSite(){
             const availableSubSites = ['/zmianyTras/', '/odjazdy/'];
-            hashSite = (window.location.hash).replace('#', '');
-            newSubSite = "/odjazdy/";
-            for(i=0; i < availableSubSites.length; i++)
-            {
-                if(newSubSite == availableSubSites[i])
-                {
-                    newSubSite = hashSite;
-                }
+            const availableModals = ['/plannerModal/', '/timetableModal/'];
+            let hashSite = (window.location.hash).replace('#', '');
+            let newSubSite = "/odjazdy/";
+            for(let i = 0; i < availableSubSites.length; i++){
+                if(hashSite == availableSubSites[i]) newSubSite = hashSite;
             }
+            if(newSubSite != hashSite) for(let i = 0; i < availableModals.length; i++){
+                if(hashSite == availableModals[i]) return 0;
+            }
+            window.location.hash = newSubSite;
             document.querySelector('iframe').src = newSubSite;
+            return 0;
         }
         changeSubSite();
         window.addEventListener("hashchange", () => {
             changeSubSite();
-        })
+        }) //>
 
+        //< Toggles the side menu
         function toggleMenu() {
-            const menu = document.getElementById('side-menu');
+            const menu = document.querySelector('aside');
             menu.classList.toggle('open');
-        }
-
+        } //>
+        
+        /* --- Logic behind changing the color scheme --- */
+        //< Checks the preferred color scheme, if one already was saved in the local storage, uses it
         function getPreferredColorScheme() {
             let systemScheme = 'light';
             if(window.matchMedia('(prefers-color-scheme: dark)').matches){
@@ -422,8 +455,9 @@
             }
 
             return chosenScheme;
-        }
+        } //>
 
+        //< Saves preferred color scheme to local storage 
         function savePreferredColorScheme(scheme){
             let systemScheme = 'light';
 
@@ -438,8 +472,9 @@
                 localStorage.setItem("scheme", scheme);
             }
 
-        }
+        } //>
 
+        //< Switches the preferred color scheme
         function toggleColorScheme(){
             let newScheme = "light";
             let scheme = getPreferredColorScheme();
@@ -451,14 +486,13 @@
             savePreferredColorScheme(newScheme);
 
             document.querySelector('iframe').contentWindow.applyPreferredColorScheme(newScheme);
-        }
+        } //>
 
+        //< Changes the color scheme displayed on the website to match the preferred one
         function applyPreferredColorScheme(scheme) {
             for (var s = 0; s < document.styleSheets.length; s++) {
-
                 for (var i = 0; i < document.styleSheets[s].cssRules.length; i++) {
                     rule = document.styleSheets[s].cssRules[i];
-
 
                     if (rule && rule.media && rule.media.mediaText.includes("prefers-color-scheme")) {
 
@@ -482,6 +516,7 @@
                     }
                 }
             }
+            //< Changes the color scheme switcher icon based on the current color scheme
             if (scheme === "dark") {
                 document.getElementById("icon-sun").style.display = 'inline';
                 document.getElementById("icon-moon").style.display = 'none';
@@ -490,18 +525,19 @@
                 document.getElementById("icon-moon").style.display = 'inline';
                 document.getElementById("icon-sun").style.display = 'none';
                 document.getElementById("icon-change-theme").title = 'Przełącz na tryb ciemny';
-            }
+            } //>
         }
+        applyPreferredColorScheme(getPreferredColorScheme()); //>
+        /* --- --- */
 
-        applyPreferredColorScheme(getPreferredColorScheme());
-
-        /* --- LOGIKA MODALI --- */
-                function openTimetablesModal() {
+        /* --- Logic behind modals --- */
+        //< Function names are self-explanatory here
+        function openTimetablesModal() {
             document.getElementById('timetables-modal').style.display = 'block';
             document.getElementById('modal-city-select').style.display = 'flex';
             document.getElementById('modal-browser-content').style.display = 'none';
         }
-
+        
         function closeTimetablesModal() {
             document.getElementById('timetables-modal').style.display = 'none';
         }
@@ -527,8 +563,9 @@
 
         function closeJourneyModal() {
             document.getElementById('journey-modal').style.display = 'none';
-        }
+        } //>
 
+        //< Fetches an OpenTripPlanner (OTP) connnection from the server
         function szukajPolaczeniaOTP(e) {
             e.preventDefault();
             
@@ -567,8 +604,9 @@
                     console.error("Pełny błąd planera:", err);
                     resultsDiv.innerHTML = `<div class="empty-state" style="color:red; border-color: red;"><b>Wewnętrzny błąd systemu:</b><br>${err.message}</div>`;
                 });
-        }
+        } //>
 
+        //< Displays the response from the server in the modal after fetching an OTP connection
         function renderOTPResults(itineraries) {
             let html = '<div class="itineraries-container">';
             
@@ -626,8 +664,11 @@
 
             html += '</div>';
             return html;
-        }
-
+        } //>
+        /* --- --- */
+        
+        /*p From here onwards the rest of the code is *not* explained using comments. Personally I have no idea what the functions do, and I
+        don't particulary have much time to try to understand and explain them rn, sorry! ~ Majka p*/ 
         function toggleClearBtn(inputElement) {
             const clearBtn = inputElement.nextElementSibling;
             if (inputElement.value.length > 0) {
