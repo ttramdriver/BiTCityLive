@@ -685,18 +685,6 @@
             inputElement.focus();
         }
 
-        function submitExactStop(exactValue) {
-            let inputId = 'input-bydgoszcz';
-            if (exactValue.startsWith('T')) { inputId = 'input-torun'; } 
-            else if (exactValue.startsWith('P')) { inputId = 'input-pociagi'; }
-            let inputEl = document.getElementById(inputId);
-            
-            if(inputEl) {
-                inputEl.value = exactValue; 
-                inputEl.closest('form').submit(); 
-            }
-        }
-
         const torunStops = {{ unikalne_nazwy['T'] | tojson | safe }};
         const bydgoszczStops = {{ unikalne_nazwy['B'] | tojson | safe }};
         const pociagiStops = {{ unikalne_nazwy['P'] | default('[]') | tojson | safe }};
@@ -844,21 +832,6 @@
             setupPlannerAutocomplete('planner-from', przystankiPlanera, 'planner-from-list');
             setupPlannerAutocomplete('planner-to', przystankiPlanera, 'planner-to-list');
 
-            {% if stop_number and not matching_stops %}
-            setTimeout(() => {
-                let sformatowaneOdswiezenie = false;
-                inputs.forEach(inp => {
-                    if (inp.name === "stop_number" && inp.value && inp.value.trim() !== "") {
-                        inp.closest('form').submit();
-                        sformatowaneOdswiezenie = true;
-                    }
-                });
-                
-                if (!sformatowaneOdswiezenie) {
-                    location.reload();
-                }
-            }, 60000); 
-            {% endif %}
         });
 
         const parseTrasy = (data) => {
@@ -922,7 +895,7 @@
                             else if ((num >= 40 && num < 50) || (num >= 90 && num < 100)) { miedzygminne.push(linia); } 
                             else { dzienne.push(linia); }
                         } else {
-                            if (num < 20) { tramwaje.push(linia); } 
+                            if (num < 10) { tramwaje.push(linia); } 
                             else if (num > 100) { miedzygminne.push(linia); } 
                             else { dzienne.push(linia); }
                         }
@@ -1008,17 +981,8 @@
                 
                 div.onclick = () => {
                     closeTimetablesModal();
-                    
                     const docelowyInputId = wybraneMiasto === 'T' ? 'input-torun' : 'input-bydgoszcz';
-                    const inputFormularza = document.getElementById(docelowyInputId);
-                    
-                    let bezpiecznyKod = przystanek.kod;
-                    if (typeof bezpiecznyKod === 'number' || (!String(bezpiecznyKod).startsWith('B') && !String(bezpiecznyKod).startsWith('T'))) {
-                        bezpiecznyKod = wybraneMiasto + bezpiecznyKod;
-                    }
-                    
-                    inputFormularza.value = bezpiecznyKod + ': ' + przystanek.nazwa;
-                    inputFormularza.closest('form').submit();
+                    document.querySelector('iframe').contentWindow.setStop(docelowyInputId, wybraneMiasto, przystanek)
                 };
                 
                 timeline.appendChild(div);
