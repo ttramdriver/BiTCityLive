@@ -1025,10 +1025,7 @@
             });
         }
 
-        function showJourneyDetails(line, direction, departureTimeStr) {
-            const currentStopRaw = "{{ stop_number if stop_number else '' }}".trim();
-            if(!currentStopRaw) return;
-
+        function showJourneyDetails(line, direction, departureTimeStr, currentStopRaw) {
             const currentStopIdRaw = currentStopRaw.split(':')[0].trim();
             const currentStopNameRaw = currentStopRaw.split(': ')[1] ? currentStopRaw.split(': ')[1].trim() : '';
             const isTrain = currentStopIdRaw.startsWith('P');
@@ -1120,15 +1117,7 @@
                 div.onclick = () => {
                     closeJourneyModal();
                     const docelowyInputId = city === 'T' ? 'input-torun' : 'input-bydgoszcz';
-                    const inputFormularza = document.getElementById(docelowyInputId);
-                    
-                    let bezpiecznyKod = przystanek.kod;
-                    if (typeof bezpiecznyKod === 'number' || (!String(bezpiecznyKod).startsWith('B') && !String(bezpiecznyKod).startsWith('T'))) {
-                        bezpiecznyKod = city + bezpiecznyKod;
-                    }
-                    
-                    inputFormularza.value = bezpiecznyKod + ': ' + przystanek.nazwa;
-                    inputFormularza.closest('form').submit();
+                    document.querySelector('iframe').contentWindow.setStop(docelowyInputId, city, przystanek)
                 };
                 
                 timeline.appendChild(div);
@@ -1150,8 +1139,7 @@
                     accumulatedMinutes += timeToAdd; 
                 }
             });
-
-            document.getElementById('journey-modal').style.display = 'block'; // Zmiana na block wg wczorajszej poprawki!
+            document.getElementById('journey-modal').style.display = 'block';
         }
     </script>
 </body>

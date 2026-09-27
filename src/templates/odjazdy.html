@@ -304,7 +304,7 @@
                     </thead>
                     <tbody>
                         {% for dep in departures %}
-                        <tr style="cursor: pointer;" data-line="{{ dep.line }}" data-direction="{{ dep.direction }}" onclick="showJourneyDetails(this.getAttribute('data-line'), this.getAttribute('data-direction'), '{{ dep.time }}')">
+                        <tr style="cursor: pointer;" data-line="{{ dep.line }}" data-direction="{{ dep.direction }}" onclick="parseJourneyDetails(this.getAttribute('data-line'), this.getAttribute('data-direction'), '{{ dep.time }}')">
                             <td data-label="{% if stop_number and stop_number.startswith('P') %}Numer pociągu{% else %}Linia{% endif %}">
                                 <span class="line-number">{{ dep.line }}</span>
                             </td>
@@ -417,35 +417,6 @@
         applyPreferredColorScheme(getPreferredColorScheme());
 
         /* --- LOGIKA DLA MODALI --- */
-        function openTimetablesModal() {
-            document.getElementById('timetables-modal').style.display = 'block';
-            document.getElementById('modal-city-select').style.display = 'flex';
-            document.getElementById('modal-browser-content').style.display = 'none';
-        }
-
-        function closeTimetablesModal() {
-            document.getElementById('timetables-modal').style.display = 'none';
-        }
-
-        function openPlannerModal() {
-            document.getElementById('planner-modal').style.display = 'block';
-            
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-
-            document.getElementById('planner-date').value = `${year}-${month}-${day}`;
-            document.getElementById('planner-time').value = `${hours}:${minutes}`;
-            document.getElementById('planner-results').style.display = 'none';
-        }
-
-        function closePlannerModal() {
-            document.getElementById('planner-modal').style.display = 'none';
-        }
-
         function closeJourneyModal() {
             document.getElementById('journey-modal').style.display = 'none';
         }
@@ -905,133 +876,23 @@
             });
         }
 
-        function showJourneyDetails(line, direction, departureTimeStr) {
+        function parseJourneyDetails(line, direction, departureTimeStr) {
             const currentStopRaw = "{{ stop_number if stop_number else '' }}".trim();
             if(!currentStopRaw) return;
+            parent.showJourneyDetails(line, direction, departureTimeStr, currentStopRaw);
+        }
 
-            const currentStopIdRaw = currentStopRaw.split(':')[0].trim();
-            const currentStopNameRaw = currentStopRaw.split(': ')[1] ? currentStopRaw.split(': ')[1].trim() : '';
-            const isTrain = currentStopIdRaw.startsWith('P');
+        function setStop(docelowyInputId, city, przystanek)
+        {
+            const inputFormularza = document.getElementById(docelowyInputId);
             
-            if (isTrain) {
-                alert("Podgląd trasy dla pociągów nie jest obecnie dostępny.");
-                return;
+            let bezpiecznyKod = przystanek.kod;
+            if (typeof bezpiecznyKod === 'number' || (!String(bezpiecznyKod).startsWith('B') && !String(bezpiecznyKod).startsWith('T'))) {
+                bezpiecznyKod = city + bezpiecznyKod;
             }
-
-            let city = currentStopIdRaw.startsWith('T') ? 'T' : 'B';
-            let trasy = city === 'T' ? trasyTorun : trasyBydgoszcz;
-            let czasyOdcinkow = city === 'T' ? czasyTorun : czasyBydgoszcz; // Wybór odpowiedniej bazy czasów
             
-            let route = trasy[line];
-            if (!route) {
-                let l_upper = line.toUpperCase();
-                let key = Object.keys(trasy).find(k => k.toUpperCase() === l_upper);
-                if(key) route = trasy[key];
-                else {
-                    alert("Brak szczegółów trasy dla linii " + line + " w bazie.");
-                    return;
-                }
-            }
-
-            let bestDir = Object.keys(route).find(k => k.toLowerCase() === direction.toLowerCase());
-            if (!bestDir) {
-                bestDir = Object.keys(route).find(k => k.toLowerCase().includes(direction.toLowerCase()) || direction.toLowerCase().includes(k.toLowerCase()));
-            }
-            if (!bestDir) bestDir = Object.keys(route)[0];
-            
-            let allStops = route[bestDir];
-            
-            let startIndex = allStops.findIndex(s => {
-                let sc = String(s.kod);
-                if(sc === currentStopIdRaw) return true;
-                if(city + sc === currentStopIdRaw) return true;
-                if(sc.replace(/^0+/, '') === currentStopIdRaw.substring(1).replace(/^0+/, '')) return true;
-                return false;
-            });
-            
-            if (startIndex === -1 && currentStopNameRaw) {
-                startIndex = allStops.findIndex(s => s.nazwa.toLowerCase() === currentStopNameRaw.toLowerCase());
-            }
-            if (startIndex === -1) startIndex = 0;
-            
-            let remainingStops = allStops.slice(startIndex);
-            
-            // Obliczanie czasu bazowego
-            let baseTime = new Date();
-            const timeMatch = departureTimeStr.match(/(\d{2}):(\d{2})/);
-            if (timeMatch) {
-                baseTime.setHours(parseInt(timeMatch[1]), parseInt(timeMatch[2]), 0, 0);
-            } else {
-                const minMatch = departureTimeStr.match(/(\d+)\s*min/);
-                if (minMatch) baseTime.setMinutes(baseTime.getMinutes() + parseInt(minMatch[1]));
-            }
-
-            document.getElementById('journey-title').innerText = 'Linia ' + line;
-            document.getElementById('journey-subtitle').innerText = 'Kierunek: ' + bestDir;
-            
-            const timeline = document.getElementById('journey-timeline');
-            timeline.innerHTML = '';
-            
-            let accumulatedMinutes = 0;
-
-            remainingStops.forEach((przystanek, index) => {
-                const div = document.createElement('div');
-                div.className = 'route-stop';
-                div.style.display = 'flex';
-                div.style.justifyContent = 'space-between';
-                div.style.alignItems = 'center';
-                
-                let stopTime = new Date(baseTime.getTime() + accumulatedMinutes * 60000);
-                let timeString = stopTime.toLocaleTimeString('pl-PL', {hour: '2-digit', minute:'2-digit'});
-                
-                let stopNameHtml = '';
-                let timeHtml = '';
-
-                if (index === 0) {
-                    stopNameHtml = `<div style="flex: 1; min-width: 0; padding-right: 15px; word-break: break-word;"><strong>${przystanek.nazwa}</strong> <br><span style="font-size:0.8em; color:var(--primary-color);">(Twój przystanek)</span></div>`;
-                    timeHtml = `<div style="flex-shrink: 0; white-space: nowrap; text-align: right; color: var(--primary-color); font-weight: bold;">${timeString}</div>`;
-                } else {
-                    stopNameHtml = `<div style="flex: 1; min-width: 0; padding-right: 15px; word-break: break-word;">${przystanek.nazwa}</div>`;
-                    timeHtml = `<div style="flex-shrink: 0; white-space: nowrap; text-align: right; color: var(--text-secondary);"><span style="font-size: 0.85em; margin-right: 8px;">+ ${accumulatedMinutes} min</span><strong style="color: var(--text-main);">${timeString}</strong></div>`;
-                }
-
-                div.innerHTML = `${stopNameHtml}${timeHtml}`;
-                
-                div.onclick = () => {
-                    closeJourneyModal();
-                    const docelowyInputId = city === 'T' ? 'input-torun' : 'input-bydgoszcz';
-                    const inputFormularza = document.getElementById(docelowyInputId);
-                    
-                    let bezpiecznyKod = przystanek.kod;
-                    if (typeof bezpiecznyKod === 'number' || (!String(bezpiecznyKod).startsWith('B') && !String(bezpiecznyKod).startsWith('T'))) {
-                        bezpiecznyKod = city + bezpiecznyKod;
-                    }
-                    
-                    inputFormularza.value = bezpiecznyKod + ': ' + przystanek.nazwa;
-                    inputFormularza.closest('form').submit();
-                };
-                
-                timeline.appendChild(div);
-                
-                if (index < remainingStops.length - 1) {
-                    let nextStop = remainingStops[index + 1];
-                    let idA = String(przystanek.kod).replace(/\D/g, '').replace(/^0+/, '');
-                    let idB = String(nextStop.kod).replace(/\D/g, '').replace(/^0+/, '');
-                    let segmentKey = `${idA}-${idB}`;
-                    
-                    let timeToAdd = 2;
-                    
-                    if (czasyOdcinkow[line] && czasyOdcinkow[line][segmentKey] !== undefined) {
-                        timeToAdd = czasyOdcinkow[line][segmentKey];
-                    } else if (czasyOdcinkow['GLOBAL'] && czasyOdcinkow['GLOBAL'][segmentKey] !== undefined) {
-                        timeToAdd = czasyOdcinkow['GLOBAL'][segmentKey];
-                    }
-                    
-                    accumulatedMinutes += timeToAdd; 
-                }
-            });
-
-            document.getElementById('journey-modal').style.display = 'block'; // Zmiana na block wg wczorajszej poprawki!
+            inputFormularza.value = bezpiecznyKod + ': ' + przystanek.nazwa;
+            inputFormularza.closest('form').submit();
         }
     </script>
 </body>
