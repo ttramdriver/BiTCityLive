@@ -333,9 +333,26 @@
     </div>
 
     <script>
-        function toggleMenu() {
-            const menu = document.getElementById('side-menu');
-            menu.classList.toggle('open');
+        function stopChanged(stopNumber)
+        {
+            if((stopNumber[0] == "B" || stopNumber[0] == "T" || stopNumber[0] == "P") && (
+            !isNaN(parseInt(stopNumber.slice(1))))) parent.stopChanged(stopNumber.split(":")[0]);
+        }
+        {% if stop_number %}
+        stopChanged("{{ stop_number if stop_number else '' }}");
+        {% endif %}
+        
+        function setStop(docelowyInputId, city, kodPrzystanku, nazwaPrzystanku="")
+        {
+            const inputFormularza = document.getElementById(docelowyInputId);
+            
+            let bezpiecznyKod = kodPrzystanku;
+            if (typeof bezpiecznyKod === 'number' || (!String(bezpiecznyKod).startsWith('B') && !String(bezpiecznyKod).startsWith('T') && !String(bezpiecznyKod).startsWith('P'))) {
+                bezpiecznyKod = city + bezpiecznyKod;
+            }
+            
+            inputFormularza.value = bezpiecznyKod + ': ' + nazwaPrzystanku;
+            inputFormularza.closest('form').submit();
         }
 
         function getPreferredColorScheme() {
@@ -415,6 +432,34 @@
         }
 
         applyPreferredColorScheme(getPreferredColorScheme());
+
+        function toggleClearBtn(inputElement) {
+            const clearBtn = inputElement.nextElementSibling;
+            if (inputElement.value.length > 0) {
+                clearBtn.style.display = 'block';
+            } else {
+                clearBtn.style.display = 'none';
+            }
+        }
+
+        function clearInput(inputId) {
+            const inputElement = document.getElementById(inputId);
+            inputElement.value = '';
+            toggleClearBtn(inputElement);
+            inputElement.focus();
+        }
+
+        function submitExactStop(exactValue) {
+            let inputId = 'input-bydgoszcz';
+            if (exactValue.startsWith('T')) { inputId = 'input-torun'; } 
+            else if (exactValue.startsWith('P')) { inputId = 'input-pociagi'; }
+            let inputEl = document.getElementById(inputId);
+            
+            if(inputEl) {
+                inputEl.value = exactValue; 
+                inputEl.closest('form').submit(); 
+            }
+        }
 
         const torunStops = {{ unikalne_nazwy['T'] | tojson | safe }};
         const bydgoszczStops = {{ unikalne_nazwy['B'] | tojson | safe }};
@@ -584,19 +629,6 @@
             const currentStopRaw = "{{ stop_number if stop_number else '' }}".trim();
             if(!currentStopRaw) return;
             parent.showJourneyDetails(line, direction, departureTimeStr, currentStopRaw);
-        }
-
-        function setStop(docelowyInputId, city, przystanek)
-        {
-            const inputFormularza = document.getElementById(docelowyInputId);
-            
-            let bezpiecznyKod = przystanek.kod;
-            if (typeof bezpiecznyKod === 'number' || (!String(bezpiecznyKod).startsWith('B') && !String(bezpiecznyKod).startsWith('T'))) {
-                bezpiecznyKod = city + bezpiecznyKod;
-            }
-            
-            inputFormularza.value = bezpiecznyKod + ': ' + przystanek.nazwa;
-            inputFormularza.closest('form').submit();
         }
     </script>
 </body>
