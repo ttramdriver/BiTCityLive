@@ -2,6 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BiTCityLive - Komunikacja miejska na żywo</title>
     
@@ -304,7 +305,7 @@
                     </thead>
                     <tbody>
                         {% for dep in departures %}
-                        <tr style="cursor: pointer;" data-line="{{ dep.line }}" data-direction="{{ dep.direction }}" onclick="showJourneyDetails(this.getAttribute('data-line'), this.getAttribute('data-direction'), '{{ dep.time }}')">
+                        <tr style="cursor: pointer;" data-line="{{ dep.line }}" data-direction="{{ dep.direction }}" onclick="parseJourneyDetails(this.getAttribute('data-line'), this.getAttribute('data-direction'), '{{ dep.time }}')">
                             <td data-label="{% if stop_number and stop_number.startswith('P') %}Numer pociągu{% else %}Linia{% endif %}">
                                 <span class="line-number">{{ dep.line }}</span>
                             </td>
@@ -333,9 +334,26 @@
     </div>
 
     <script>
-        function toggleMenu() {
-            const menu = document.getElementById('side-menu');
-            menu.classList.toggle('open');
+        function stopChanged(stopNumber)
+        {
+            if((stopNumber[0] == "B" || stopNumber[0] == "T" || stopNumber[0] == "P") && (
+            !isNaN(parseInt(stopNumber.slice(1))))) parent.stopChanged(stopNumber.split(":")[0]);
+        }
+        {% if stop_number %}
+        stopChanged("{{ stop_number if stop_number else '' }}");
+        {% endif %}
+        
+        function setStop(docelowyInputId, city, kodPrzystanku, nazwaPrzystanku="")
+        {
+            const inputFormularza = document.getElementById(docelowyInputId);
+            
+            let bezpiecznyKod = kodPrzystanku;
+            if (typeof bezpiecznyKod === 'number' || (!String(bezpiecznyKod).startsWith('B') && !String(bezpiecznyKod).startsWith('T') && !String(bezpiecznyKod).startsWith('P'))) {
+                bezpiecznyKod = city + bezpiecznyKod;
+            }
+            
+            inputFormularza.value = bezpiecznyKod + ': ' + nazwaPrzystanku;
+            inputFormularza.closest('form').submit();
         }
 
         function getPreferredColorScheme() {
@@ -415,139 +433,6 @@
         }
 
         applyPreferredColorScheme(getPreferredColorScheme());
-
-        /* --- LOGIKA DLA MODALI --- */
-        function openTimetablesModal() {
-            document.getElementById('timetables-modal').style.display = 'block';
-            document.getElementById('modal-city-select').style.display = 'flex';
-            document.getElementById('modal-browser-content').style.display = 'none';
-        }
-
-        function closeTimetablesModal() {
-            document.getElementById('timetables-modal').style.display = 'none';
-        }
-
-        function openPlannerModal() {
-            document.getElementById('planner-modal').style.display = 'block';
-            
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-
-            document.getElementById('planner-date').value = `${year}-${month}-${day}`;
-            document.getElementById('planner-time').value = `${hours}:${minutes}`;
-            document.getElementById('planner-results').style.display = 'none';
-        }
-
-        function closePlannerModal() {
-            document.getElementById('planner-modal').style.display = 'none';
-        }
-
-        function closeJourneyModal() {
-            document.getElementById('journey-modal').style.display = 'none';
-        }
-
-        function szukajPolaczeniaOTP(e) {
-            e.preventDefault();
-            
-            const from = document.getElementById('planner-from').value;
-            const to = document.getElementById('planner-to').value;
-            const date = document.getElementById('planner-date').value;
-            const time = document.getElementById('planner-time').value;
-            const arriveBy = document.getElementById('planner-arrive-by').value;
-
-            const resultsDiv = document.getElementById('planner-results');
-            resultsDiv.style.display = 'block';
-            resultsDiv.innerHTML = `<div class="empty-state">Łączenie z serwerem i szukanie najlepszej trasy...</div>`;
-
-            fetch(`/api/planer?fromPlace=${encodeURIComponent(from)}&toPlace=${encodeURIComponent(to)}&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}&arriveBy=${arriveBy}`)
-                .then(async res => {
-                    const data = await res.json();
-                    if (!res.ok) {
-                        let errorMsg = "Nieznany błąd serwera";
-                        if (data.error && typeof data.error === 'object') {
-                            errorMsg = data.error.msg || JSON.stringify(data.error);
-                        } else if (typeof data.error === 'string') {
-                            errorMsg = data.error;
-                        }
-                        throw new Error(errorMsg);
-                    }
-                    return data;
-                })
-                .then(data => {
-                    if (data.plan && data.plan.itineraries && data.plan.itineraries.length > 0) {
-                        resultsDiv.innerHTML = renderOTPResults(data.plan.itineraries);
-                    } else {
-                        resultsDiv.innerHTML = `<div class="empty-state">Brak dostępnych tras w tym czasie dla podanych punktów.</div>`;
-                    }
-                })
-                .catch(err => {
-                    console.error("Pełny błąd planera:", err);
-                    resultsDiv.innerHTML = `<div class="empty-state" style="color:red; border-color: red;"><b>Wewnętrzny błąd systemu:</b><br>${err.message}</div>`;
-                });
-        }
-
-        function renderOTPResults(itineraries) {
-            let html = '<div class="itineraries-container">';
-            
-            itineraries.forEach(itin => {
-                const start = new Date(itin.startTime).toLocaleTimeString('pl-PL', {hour: '2-digit', minute:'2-digit'});
-                const end = new Date(itin.endTime).toLocaleTimeString('pl-PL', {hour: '2-digit', minute:'2-digit'});
-                const durationMins = Math.round(itin.duration / 60);
-
-                html += `
-                <div class="itinerary-card">
-                    <div class="itinerary-header">
-                        <div class="itinerary-times">${start} &rarr; ${end}</div>
-                        <div class="itinerary-meta">
-                            <span>${durationMins} min</span>
-                            <span>Przesiadki: ${itin.transfers}</span>
-                        </div>
-                    </div>
-                    <div class="itinerary-legs">`;
-
-                itin.legs.forEach(leg => {
-                    const legStart = new Date(leg.startTime).toLocaleTimeString('pl-PL', {hour: '2-digit', minute:'2-digit'});
-                    const durationLeg = Math.round(leg.duration / 60);
-
-                    if (leg.mode === 'WALK') {
-                        html += `
-                        <div class="leg">
-                            <div class="leg-time">${legStart}</div>
-                            <div class="leg-icon walk">🚶</div>
-                            <div class="leg-details">
-                                Idź do <strong>${leg.to.name === 'Destination' ? 'celu' : leg.to.name}</strong> 
-                                <br><small>(${durationLeg} min, ${Math.round(leg.distance)} m)</small>
-                            </div>
-                        </div>`;
-                    } else {
-                        let icon = '🚌';
-                        if (leg.mode === 'TRAM') icon = '🚋';
-                        if (leg.mode === 'RAIL') icon = '🚂';
-                        
-                        const routeName = leg.routeShortName || leg.route || leg.mode;
-
-                        html += `
-                        <div class="leg">
-                            <div class="leg-time">${legStart}</div>
-                            <div class="leg-icon transit">${icon}</div>
-                            <div class="leg-details">
-                                <span class="leg-route">${routeName}</span> w kierunku <strong>${leg.headsign || leg.to.name}</strong>
-                                <br><small>Wysiadasz: <strong>${leg.to.name}</strong> (${durationLeg} min)</small>
-                            </div>
-                        </div>`;
-                    }
-                });
-
-                html += `</div></div>`;
-            });
-
-            html += '</div>';
-            return html;
-        }
 
         function toggleClearBtn(inputElement) {
             const clearBtn = inputElement.nextElementSibling;
@@ -740,298 +625,11 @@
             }, 60000); 
             {% endif %}
         });
-
-        const parseTrasy = (data) => {
-            if (typeof data === 'string') {
-                try { data = JSON.parse(data); } catch(e) { return {}; }
-            }
-            if (typeof data === 'string') return {}; 
-            return data || {};
-        };
-
-        let trasyBydgoszcz = parseTrasy({{ trasy_b | default({}) | tojson | safe }});
-        let trasyTorun = parseTrasy({{ trasy_t | default({}) | tojson | safe }});
-
-        let czasyBydgoszcz = parseTrasy({{ czasy_b | default({}) | tojson | safe }});
-        let czasyTorun = parseTrasy({{ czasy_t | default({}) | tojson | safe }});
         
-        let obecnyWidok = 'linie';
-        let wybranaLinia = '';
-        let wybraneMiasto = '';
-        let aktywneTrasy = {};
-
-        function renderLinie(miasto) {
-            wybraneMiasto = miasto;
-            obecnyWidok = 'linie';
-            wybranaLinia = '';
-            aktywneTrasy = (miasto === 'B') ? trasyBydgoszcz : trasyTorun;
-            
-            document.getElementById('modal-city-select').style.display = 'none';
-            document.getElementById('modal-browser-content').style.display = 'block';
-            
-            const title = document.getElementById('browser-title');
-            const backBtn = document.getElementById('browser-back');
-            const content = document.getElementById('browser-inner-content');
-
-            title.innerText = miasto === 'T' ? 'Linie dzienne i tramwajowe (Toruń)' : 'Linie dzienne i tramwajowe (Bydgoszcz)';
-            backBtn.style.display = 'block';
-            backBtn.onclick = openTimetablesModal;
-            content.innerHTML = '';
-            
-            const linie = Object.keys(aktywneTrasy)
-                .filter(linia => !linia.toUpperCase().includes('REMONT'))
-                .sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
-            
-            const tramwaje = []; const dzienne = []; const miedzygminne = []; const nocne = []; const inne = [];
-
-            linie.forEach(linia => {
-                const l = linia.toUpperCase();
-                
-                if (l.includes('N') || (miasto === 'T' && linia.startsWith('0'))) { 
-                    nocne.push(linia); 
-                } 
-                else if (l.includes('ZA') || l.includes('ZT')) { 
-                    inne.push(linia); 
-                } 
-                else {
-                    const dopasowaneLiczby = linia.match(/\d+/);
-                    if (dopasowaneLiczby) {
-                        const num = parseInt(dopasowaneLiczby[0]);
-                        if (miasto === 'B') {
-                            if (num <= 11) { tramwaje.push(linia); } 
-                            else if ((num >= 40 && num < 50) || (num >= 90 && num < 100)) { miedzygminne.push(linia); } 
-                            else { dzienne.push(linia); }
-                        } else {
-                            if (num < 20) { tramwaje.push(linia); } 
-                            else if (num > 100) { miedzygminne.push(linia); } 
-                            else { dzienne.push(linia); }
-                        }
-                    } else {
-                        inne.push(linia);
-                    }
-                }
-            });
-
-            function createSection(titleText, items) {
-                if (items.length === 0) return;
-                const titleEl = document.createElement('h4');
-                titleEl.innerText = titleText;
-                titleEl.style.color = 'var(--text-secondary)';
-                titleEl.style.marginTop = '20px'; titleEl.style.marginBottom = '10px'; titleEl.style.fontWeight = 'normal';
-                content.appendChild(titleEl);
-
-                const grid = document.createElement('div');
-                grid.className = 'lines-grid';
-                items.forEach(linia => {
-                    const btn = document.createElement('div');
-                    btn.className = 'line-badge';
-                    btn.innerText = linia;
-                    btn.onclick = () => renderKierunki(linia);
-                    grid.appendChild(btn);
-                });
-                content.appendChild(grid);
-            }
-
-            createSection('Linie tramwajowe', tramwaje);
-            createSection('Linie dzienne', dzienne);
-            if (miasto === 'B') createSection('Linie międzygminne', miedzygminne); 
-            if (miasto === 'T') createSection('Linie podmiejskie', miedzygminne); 
-            createSection('Linie nocne', nocne);
-            createSection('Pozostałe', inne);
-            
-            if (linie.length === 0) {
-                 content.innerHTML = '<div class="empty-state">Brak przypisanych linii dla tego miasta. Sprawdź, czy skrypt Pythona wygenerował plik JSON poprawnie!</div>';
-            }
-        }
-
-        function renderKierunki(linia) {
-            obecnyWidok = 'kierunki';
-            wybranaLinia = linia;
-            
-            const title = document.getElementById('browser-title');
-            const backBtn = document.getElementById('browser-back');
-            const content = document.getElementById('browser-inner-content');
-            
-            title.innerText = 'Linia ' + linia + ' - Wybierz kierunek';
-            backBtn.onclick = () => renderLinie(wybraneMiasto);
-            content.innerHTML = '';
-            
-            const kierunki = Object.keys(aktywneTrasy[linia]);
-            kierunki.forEach(kier => {
-                const btn = document.createElement('button');
-                btn.className = 'direction-btn';
-                btn.type = 'button';
-                btn.innerHTML = '<span style="color: #888; font-size: 0.8em; margin-right: 10px;">kier.</span>' + kier;
-                btn.onclick = () => renderPrzystanki(linia, kier);
-                content.appendChild(btn);
-            });
-        }
-
-        function renderPrzystanki(linia, kierunek) {
-            obecnyWidok = 'przystanki';
-            
-            const title = document.getElementById('browser-title');
-            const backBtn = document.getElementById('browser-back');
-            const content = document.getElementById('browser-inner-content');
-            
-            title.innerText = 'Kierunek: ' + kierunek;
-            backBtn.onclick = () => renderKierunki(linia);
-            
-            content.innerHTML = '<div class="route-timeline"></div>';
-            const timeline = content.querySelector('.route-timeline');
-            
-            const przystanki = aktywneTrasy[linia][kierunek];
-            przystanki.forEach(przystanek => {
-                const div = document.createElement('div');
-                div.className = 'route-stop';
-                div.innerText = przystanek.nazwa;
-                
-                div.onclick = () => {
-                    closeTimetablesModal();
-                    
-                    const docelowyInputId = wybraneMiasto === 'T' ? 'input-torun' : 'input-bydgoszcz';
-                    const inputFormularza = document.getElementById(docelowyInputId);
-                    
-                    let bezpiecznyKod = przystanek.kod;
-                    if (typeof bezpiecznyKod === 'number' || (!String(bezpiecznyKod).startsWith('B') && !String(bezpiecznyKod).startsWith('T'))) {
-                        bezpiecznyKod = wybraneMiasto + bezpiecznyKod;
-                    }
-                    
-                    inputFormularza.value = bezpiecznyKod + ': ' + przystanek.nazwa;
-                    inputFormularza.closest('form').submit();
-                };
-                
-                timeline.appendChild(div);
-            });
-        }
-
-        function showJourneyDetails(line, direction, departureTimeStr) {
+        function parseJourneyDetails(line, direction, departureTimeStr) {
             const currentStopRaw = "{{ stop_number if stop_number else '' }}".trim();
             if(!currentStopRaw) return;
-
-            const currentStopIdRaw = currentStopRaw.split(':')[0].trim();
-            const currentStopNameRaw = currentStopRaw.split(': ')[1] ? currentStopRaw.split(': ')[1].trim() : '';
-            const isTrain = currentStopIdRaw.startsWith('P');
-            
-            if (isTrain) {
-                alert("Podgląd trasy dla pociągów nie jest obecnie dostępny.");
-                return;
-            }
-
-            let city = currentStopIdRaw.startsWith('T') ? 'T' : 'B';
-            let trasy = city === 'T' ? trasyTorun : trasyBydgoszcz;
-            let czasyOdcinkow = city === 'T' ? czasyTorun : czasyBydgoszcz; // Wybór odpowiedniej bazy czasów
-            
-            let route = trasy[line];
-            if (!route) {
-                let l_upper = line.toUpperCase();
-                let key = Object.keys(trasy).find(k => k.toUpperCase() === l_upper);
-                if(key) route = trasy[key];
-                else {
-                    alert("Brak szczegółów trasy dla linii " + line + " w bazie.");
-                    return;
-                }
-            }
-
-            let bestDir = Object.keys(route).find(k => k.toLowerCase() === direction.toLowerCase());
-            if (!bestDir) {
-                bestDir = Object.keys(route).find(k => k.toLowerCase().includes(direction.toLowerCase()) || direction.toLowerCase().includes(k.toLowerCase()));
-            }
-            if (!bestDir) bestDir = Object.keys(route)[0];
-            
-            let allStops = route[bestDir];
-            
-            let startIndex = allStops.findIndex(s => {
-                let sc = String(s.kod);
-                if(sc === currentStopIdRaw) return true;
-                if(city + sc === currentStopIdRaw) return true;
-                if(sc.replace(/^0+/, '') === currentStopIdRaw.substring(1).replace(/^0+/, '')) return true;
-                return false;
-            });
-            
-            if (startIndex === -1 && currentStopNameRaw) {
-                startIndex = allStops.findIndex(s => s.nazwa.toLowerCase() === currentStopNameRaw.toLowerCase());
-            }
-            if (startIndex === -1) startIndex = 0;
-            
-            let remainingStops = allStops.slice(startIndex);
-            
-            // Obliczanie czasu bazowego
-            let baseTime = new Date();
-            const timeMatch = departureTimeStr.match(/(\d{2}):(\d{2})/);
-            if (timeMatch) {
-                baseTime.setHours(parseInt(timeMatch[1]), parseInt(timeMatch[2]), 0, 0);
-            } else {
-                const minMatch = departureTimeStr.match(/(\d+)\s*min/);
-                if (minMatch) baseTime.setMinutes(baseTime.getMinutes() + parseInt(minMatch[1]));
-            }
-
-            document.getElementById('journey-title').innerText = 'Linia ' + line;
-            document.getElementById('journey-subtitle').innerText = 'Kierunek: ' + bestDir;
-            
-            const timeline = document.getElementById('journey-timeline');
-            timeline.innerHTML = '';
-            
-            let accumulatedMinutes = 0;
-
-            remainingStops.forEach((przystanek, index) => {
-                const div = document.createElement('div');
-                div.className = 'route-stop';
-                div.style.display = 'flex';
-                div.style.justifyContent = 'space-between';
-                div.style.alignItems = 'center';
-                
-                let stopTime = new Date(baseTime.getTime() + accumulatedMinutes * 60000);
-                let timeString = stopTime.toLocaleTimeString('pl-PL', {hour: '2-digit', minute:'2-digit'});
-                
-                let stopNameHtml = '';
-                let timeHtml = '';
-
-                if (index === 0) {
-                    stopNameHtml = `<div style="flex: 1; min-width: 0; padding-right: 15px; word-break: break-word;"><strong>${przystanek.nazwa}</strong> <br><span style="font-size:0.8em; color:var(--primary-color);">(Twój przystanek)</span></div>`;
-                    timeHtml = `<div style="flex-shrink: 0; white-space: nowrap; text-align: right; color: var(--primary-color); font-weight: bold;">${timeString}</div>`;
-                } else {
-                    stopNameHtml = `<div style="flex: 1; min-width: 0; padding-right: 15px; word-break: break-word;">${przystanek.nazwa}</div>`;
-                    timeHtml = `<div style="flex-shrink: 0; white-space: nowrap; text-align: right; color: var(--text-secondary);"><span style="font-size: 0.85em; margin-right: 8px;">+ ${accumulatedMinutes} min</span><strong style="color: var(--text-main);">${timeString}</strong></div>`;
-                }
-
-                div.innerHTML = `${stopNameHtml}${timeHtml}`;
-                
-                div.onclick = () => {
-                    closeJourneyModal();
-                    const docelowyInputId = city === 'T' ? 'input-torun' : 'input-bydgoszcz';
-                    const inputFormularza = document.getElementById(docelowyInputId);
-                    
-                    let bezpiecznyKod = przystanek.kod;
-                    if (typeof bezpiecznyKod === 'number' || (!String(bezpiecznyKod).startsWith('B') && !String(bezpiecznyKod).startsWith('T'))) {
-                        bezpiecznyKod = city + bezpiecznyKod;
-                    }
-                    
-                    inputFormularza.value = bezpiecznyKod + ': ' + przystanek.nazwa;
-                    inputFormularza.closest('form').submit();
-                };
-                
-                timeline.appendChild(div);
-                
-                if (index < remainingStops.length - 1) {
-                    let nextStop = remainingStops[index + 1];
-                    let idA = String(przystanek.kod).replace(/\D/g, '').replace(/^0+/, '');
-                    let idB = String(nextStop.kod).replace(/\D/g, '').replace(/^0+/, '');
-                    let segmentKey = `${idA}-${idB}`;
-                    
-                    let timeToAdd = 2;
-                    
-                    if (czasyOdcinkow[line] && czasyOdcinkow[line][segmentKey] !== undefined) {
-                        timeToAdd = czasyOdcinkow[line][segmentKey];
-                    } else if (czasyOdcinkow['GLOBAL'] && czasyOdcinkow['GLOBAL'][segmentKey] !== undefined) {
-                        timeToAdd = czasyOdcinkow['GLOBAL'][segmentKey];
-                    }
-                    
-                    accumulatedMinutes += timeToAdd; 
-                }
-            });
-
-            document.getElementById('journey-modal').style.display = 'block'; // Zmiana na block wg wczorajszej poprawki!
+            parent.showJourneyDetails(line, direction, departureTimeStr, currentStopRaw);
         }
     </script>
 </body>
