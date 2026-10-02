@@ -18,7 +18,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            // AndroidView pozwala osadzić tradycyjny widok w Jetpack Compose
             AndroidView(
                 modifier = Modifier.fillMaxSize(),
                 factory = { context ->
