@@ -253,8 +253,9 @@
         .leg-details { flex-grow: 1; line-height: 1.4; color: var(--text-main); }
         .leg-route { font-weight: bold; padding: 2px 6px; border-radius: 4px; background: var(--bg-color); border: 1px solid var(--border-color); }
         
-        .datetime-inputs { display: flex; gap: 10px; }
-        .datetime-inputs input, .datetime-inputs select { flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; background-color: var(--bg-color); color: var(--text-main); font-size: 1em; box-sizing: border-box; }
+        .datetime-inputs { display: flex; flex-wrap: wrap; gap: 10px; }
+        .datetime-inputs select { flex: 1 1 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; background-color: var(--bg-color); color: var(--text-main); font-size: 1em; box-sizing: border-box; }
+        .datetime-inputs input { flex: 1 1 40%; min-width: 0; padding: 12px; border: 1px solid var(--border-color); border-radius: 4px; background-color: var(--bg-color); color: var(--text-main); font-size: 1em; box-sizing: border-box; }
         .submit-planner-btn { width: 100%; padding: 15px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
         .submit-planner-btn:hover { opacity: 0.9; }
     </style>
